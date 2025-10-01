@@ -637,11 +637,11 @@
                                                 <td>
                                                     @if (mojaRez != null)
                                                     {
-                                                        <a class="btn btn-sm btn-danger" href="@Url.Action("Otkazi","Rezervacija",new { id = mojaRez.Id })">Otkaži</a>
+                                                        <a class="btn btn-sm btn-danger" href="@Url.Action("Otkazi","Rezervacija",new { id = mojaRez.Id })">Otkazi</a>
                                                     }
                                                     else if (korisnikPrijavljen && j.Status == MyWebApp.Models.StatusSmestajneJedinice.Slobodna)
                                                     {
-                                                        <a class="btn btn-sm btn-success" href="@Url.Action("Create","Rezervacija", new { aranzmanID = Model.Id, smestajId = sm.Id, jedinicaId = j.Id })">Rezerviši</a>
+                                                        <a class="btn btn-sm btn-success" href="@Url.Action("Create","Rezervacija", new { aranzmanID = Model.Id, smestajId = sm.Id, jedinicaId = j.Id })">Rezervisi</a>
                                                     }
                                                     else
                                                     { @j.Status}
