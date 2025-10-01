@@ -1,0 +1,50 @@
+@model IEnumerable<MyWebApp.Models.Komentar>
+
+<div class="container mt-5">
+    <h2>Komentari na odobravanje</h2>
+
+    @if (TempData["OK"] != null)
+    {
+        <div class="alert alert-success">@TempData["OK"]</div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Turista</th>
+                <th>Smeštaj</th>
+                <th>Tekst</th>
+                <th>Ocena</th>
+                <th style="width:180px">Akcija</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var k in Model)
+            {
+                <tr>
+                    <td>@k.Turista</td>
+                    <td>@k.SmestajNaziv</td>
+                    <td>@k.Tekst</td>
+                    <td>@k.Ocena</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            @using (Html.BeginForm("Approve", "MenadzerKomentar", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", k.Id)
+                                <button type="submit" class="btn btn-success btn-sm" @(k.Odobren ? "disabled" : "")>Odobri</button>
+                            }
+                            @using (Html.BeginForm("Reject", "MenadzerKomentar", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", k.Id)
+                                <button type="submit" class="btn btn-danger btn-sm" @(!k.Odobren ? "disabled" : "")>Odbij</button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

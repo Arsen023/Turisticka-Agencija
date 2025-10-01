@@ -1,0 +1,218 @@
+[
+  {
+    "Id": 1,
+    "SmestajID": 1,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 120.0,
+    "Status": 1,
+    "IsDeleted": false
+  },
+  {
+    "Id": 2,
+    "SmestajID": 1,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 180.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 3,
+    "SmestajID": 1,
+    "DozvoljenBrojGostiju": 6,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 250.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 4,
+    "SmestajID": 2,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 90.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 5,
+    "SmestajID": 2,
+    "DozvoljenBrojGostiju": 3,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 130.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 6,
+    "SmestajID": 3,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 100.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 7,
+    "SmestajID": 3,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 150.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 8,
+    "SmestajID": 3,
+    "DozvoljenBrojGostiju": 6,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 200.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 9,
+    "SmestajID": 4,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 80.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 10,
+    "SmestajID": 4,
+    "DozvoljenBrojGostiju": 3,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 110.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 11,
+    "SmestajID": 5,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 140.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 12,
+    "SmestajID": 5,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 200.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 13,
+    "SmestajID": 5,
+    "DozvoljenBrojGostiju": 6,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 280.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 14,
+    "SmestajID": 6,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 95.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 15,
+    "SmestajID": 6,
+    "DozvoljenBrojGostiju": 3,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 135.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 16,
+    "SmestajID": 7,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 70.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 17,
+    "SmestajID": 7,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 100.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 18,
+    "SmestajID": 8,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 110.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 19,
+    "SmestajID": 8,
+    "DozvoljenBrojGostiju": 3,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 150.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 20,
+    "SmestajID": 9,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 300.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 21,
+    "SmestajID": 9,
+    "DozvoljenBrojGostiju": 6,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 400.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 22,
+    "SmestajID": 9,
+    "DozvoljenBrojGostiju": 8,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 500.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 23,
+    "SmestajID": 10,
+    "DozvoljenBrojGostiju": 2,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 200.0,
+    "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 24,
+    "SmestajID": 10,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": false,
+    "CenaZaCeluSmestajnuJedinicu": 300.0,
+    "Status": 0,
+    "IsDeleted": false
+  }
+]

@@ -1,0 +1,334 @@
+﻿@model MyWebApp.Models.Aranzman
+@{
+    ViewBag.Title = "Novi aranžman";
+    var smestaji = ViewBag.Smestaji as List<MyWebApp.Models.Smestaj>;
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --text: #f8fafc;
+        --text-dim: #cfe7f2;
+    }
+
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--text);
+    }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+        }
+
+    .page-wrap {
+        max-width: 1080px;
+    }
+
+    .neo-card {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 14px 34px rgba(0,0,0,.22);
+        overflow: hidden;
+    }
+
+    .neo-hero {
+        background: linear-gradient(90deg, #0e7490, #22d3ee);
+        color: #062a3a;
+        padding: 22px 26px;
+        border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+
+        .neo-hero h2 {
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: .3px;
+        }
+
+        .neo-hero p {
+            margin: .25rem 0 0;
+            font-weight: 600;
+            opacity: .9;
+        }
+
+    .neo-body {
+        padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .section-title {
+        font-size: .95rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: #cfe7f2;
+        margin: 14px 0 10px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,.28);
+        background: rgba(255,255,255,.07);
+        color: #fff;
+    }
+
+        .form-control::placeholder {
+            color: #d7eef6;
+            opacity: .9;
+        }
+
+    .form-text {
+        color: var(--text-dim);
+    }
+
+    .poster-wrap {
+        background: rgba(255,255,255,.06);
+        border: 1px dashed rgba(255,255,255,.25);
+        border-radius: 14px;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 220px;
+    }
+
+        .poster-wrap img {
+            max-width: 100%;
+            max-height: 280px;
+            border-radius: 12px;
+            display: none;
+        }
+
+    .smestaj-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+        gap: 14px;
+    }
+
+    .smestaj-card {
+        position: relative;
+        min-height: 96px;
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        background: rgba(255,255,255,.04);
+        padding: 12px 12px 10px;
+        transition: .18s ease;
+        box-shadow: 0 6px 14px rgba(0,0,0,.12);
+    }
+
+        .smestaj-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px rgba(0,0,0,.22);
+        }
+
+        .smestaj-card h6 {
+            margin: 0 0 6px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .smestaj-card small {
+            color: var(--text-dim);
+        }
+
+    .smestaj-check {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transform: scale(1.15);
+    }
+
+    .btn {
+        border: none;
+        border-radius: 12px;
+        font-weight: 900;
+        letter-spacing: .2px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-outline-secondary {
+        color: #eaf7ff;
+        border-color: rgba(255,255,255,.5);
+    }
+
+        .btn-outline-secondary:hover {
+            background: rgba(255,255,255,.12);
+        }
+
+    code {
+        color: #b6f0ff;
+    }
+</style>
+
+<div class="container my-4 page-wrap">
+
+    @if (TempData["AranzmanOK"] != null)
+    {
+        <div class="alert alert-success">@TempData["AranzmanOK"]</div>
+    }
+    @if (TempData["AranzmanERR"] != null)
+    {
+        <div class="alert alert-danger">@TempData["AranzmanERR"]</div>
+    }
+    <div class="neo-card">
+        <div class="neo-hero">
+            <h2>Novi aranžman</h2>
+            <p>Popuni sve informacije, izaberi smeštaje i sačuvaj.</p>
+        </div>
+
+        <div class="neo-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+
+            @using (Html.BeginForm("Create", "MenadzerAranzman", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="section-title">Osnovne informacije</div>
+                <div class="row g-4">
+                    <div class="col-md-7">
+                        <label class="form-label">Naziv</label>
+                        @Html.TextBoxFor(m => m.Naziv,
+                            new { @class = "form-control form-control-lg", required = "required", placeholder = "npr. Pariz – vikend tura" })
+                        @Html.ValidationMessageFor(m => m.Naziv, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Tip aranžmana</label>
+                        @Html.DropDownListFor(m => m.tipAranzmana,
+                            new SelectList(new[] { "nocenje_sa_doruckom", "polupansion", "pun_pansion", "all_inclusive", "najam_apartamana" }),
+                            "-- izaberi --",
+                            new { @class = "form-select text-bg-info", required = "required" })
+                        @Html.ValidationMessageFor(m => m.tipAranzmana, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label">Prevoz</label>
+                        @Html.DropDownListFor(m => m.tipPrevoza,
+                            new SelectList(new[] { "autobus", "avion", "autobus_avion", "individualan", "ostalo" }),
+                            "-- izaberi --",
+                            new { @class = "form-select text-bg-info", required = "required" })
+                        @Html.ValidationMessageFor(m => m.tipPrevoza, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Lokacija <span class="text-muted">(grad, država, regija)</span></label>
+                        @Html.TextBoxFor(m => m.lokacija,
+                            new { @class = "form-control", required = "required", placeholder = "npr. Pariz, Francuska, Île-de-France" })
+                        @Html.ValidationMessageFor(m => m.lokacija, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="section-title">Datumi & kapacitet</div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label class="form-label">Datum početka</label>
+
+                        <input type="date" id="dpStart" class="form-control" required />
+
+                        <input type="hidden" id="DatumPocetkaPutovanja" name="DatumPocetkaPutovanja" />
+                        @Html.ValidationMessageFor(m => m.DatumPocetkaPutovanja, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Datum završetka</label>
+                        <input type="date" id="dpEnd" class="form-control" required />
+                        <input type="hidden" id="DatumZavrsetkaPutovanja" name="DatumZavrsetkaPutovanja" />
+                        @Html.ValidationMessageFor(m => m.DatumZavrsetkaPutovanja, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Maksimalan broj putnika</label>
+                        @Html.TextBoxFor(m => m.MaxBrPutnika, new { @class = "form-control", type = "number", min = "1", step = "1", required = "required" })
+                        @Html.ValidationMessageFor(m => m.MaxBrPutnika, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="section-title">Poster aranžmana</div>
+                <div class="row g-4">
+                    <div class="col-md-7">
+                       
+
+
+                        <button type="button" id="btnAddPoster" class="btn btn-outline-secondary mt-3">Dodaj sliku</button>
+                        <input type="file" id="PosterFile" name="PosterFile" accept="image/*" class="d-none" />
+                    </div>
+                    <div class="col-md-5">
+                        <div class="poster-wrap">
+                            <img id="posterPreview" alt="Poster preview" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mt-1">
+                    <div class="col-md-6">
+                        <div class="section-title">Opis aranžmana</div>
+                        @Html.TextAreaFor(m => m.OpisAranzmana, new { @class = "form-control", rows = 7, required = "required", placeholder = "Kratak opis…" })
+                        @Html.ValidationMessageFor(m => m.OpisAranzmana, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <div class="section-title">Program putovanja</div>
+                        @Html.TextAreaFor(m => m.ProgramPutovanja, new { @class = "form-control", rows = 7, required = "required", placeholder = "Dan 1…, Dan 2…" })
+                        @Html.ValidationMessageFor(m => m.ProgramPutovanja, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="section-title mt-2 d-flex align-items-center justify-content-between">
+                    <span>Smeštaji u aranžmanu</span>
+                    <small id="countSel" class="text-muted"></small>
+                </div>
+
+                <div class="smestaj-grid mb-2">
+                    @if (smestaji != null && smestaji.Any())
+                    {
+                        foreach (var s in smestaji)
+                        {
+                            var preselected = (Model?.SmestajId ?? new List<int>()).Contains(s.Id);
+                            <label class="smestaj-card">
+                                <input class="form-check-input smestaj-check"
+                                       type="checkbox"
+                                       name="smestajiIds"
+                                       value="@s.Id"
+                                       @(preselected ? "checked" : null) />
+                                <h6>@s.Naziv</h6>
+                                <small>ID: @s.Id</small>
+                            </label>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-muted">Nema dostupnih smeštaja.</div>
+                    }
+                </div>
+                @Html.ValidationMessage("SmestajId", "", new { @class = "text-danger d-block" })
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Sačuvaj</button>
+                    @Html.ActionLink("Nazad", "Index", "MenadzerAranzman", null, new { @class = "btn btn-outline-secondary btn-lg ms-2" })
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/create-aranzman.js"></script>
+    <script src="~/Scripts/date-ddmmyyyy-picker.js"></script>
+    <script src="~/Scripts/poster-upload.js"></script>
+}

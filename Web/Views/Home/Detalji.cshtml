@@ -1,0 +1,676 @@
+@using MyWebApp.Service
+@model MyWebApp.Models.Aranzman
+@{
+    ViewBag.Title = "Detalji aranzmana";
+
+    var aranzmanService = new AranzmanService();
+    var fullAranzman = aranzmanService.GetById(Model.Id);
+    var smestaji = fullAranzman?.Smestaji ?? new List<MyWebApp.Models.Smestaj>();
+    bool korisnikPrijavljen = Session["Korisnik"] != null;
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --text: #f8fafc;
+        --text-dim: #cfe7f2;
+        --chipA: #15c1d1;
+        --chipB: #22d3ee;
+        --chipText: #052a37;
+    }
+
+    
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--text);
+    }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+        }
+
+   
+    .card {
+        background: var(--glass) !important;
+        border: 1px solid var(--stroke) !important;
+        border-radius: 18px !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,.22);
+        color: var(--text);
+    }
+
+        .card h4, .card h5, .card h6 {
+            color: #eaf7ff;
+        }
+
+  
+    .page-title {
+        font-weight: 800;
+        letter-spacing: .3px;
+        margin-top: .25rem;
+        background: linear-gradient(90deg,#fff,#e9f8ff 45%,#ffffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 20px rgba(34,211,238,.15);
+    }
+
+    .hero-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 18px 40px rgba(0,0,0,.35);
+    }
+
+    .trip-hero {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .image-container:hover .trip-hero {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, rgba(0,0,0,0.3), transparent);
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding: 1.5rem;
+    }
+
+    .badge-container {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+
+    .trip-info {
+        padding: 2rem 0;
+    }
+
+    .trip-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    .meta-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .meta-item i {
+        font-size: 1.5rem;
+        width: 2rem;
+        text-align: center;
+    }
+
+    .meta-item div {
+        flex: 1;
+    }
+
+    .meta-item strong {
+        color: #c9f3ff;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .meta-item span {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    
+    .btn {
+        border: none;
+        font-weight: 700;
+        letter-spacing: .2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(90deg,#64748b,#94a3b8);
+        color: #051821;
+    }
+
+    .btn-success {
+        background: linear-gradient(90deg,#16a34a,#22c55e);
+    }
+
+    .btn-danger {
+        background: linear-gradient(90deg,#ef4444,#f97316);
+    }
+
+    
+    .form-control, .form-select {
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,.28);
+        background: rgba(255,255,255,.07);
+        color: #fff;
+    }
+
+        .form-control::placeholder {
+            color: #d7eef6;
+            opacity: .85;
+        }
+
+    
+    .filters .chip-input {
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,.25);
+        background: linear-gradient(90deg,var(--chipA),var(--chipB)) !important;
+        color: var(--chipText) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 8px 16px rgba(0,0,0,.18);
+    }
+
+        .filters .chip-input::placeholder {
+            color: var(--chipText);
+            opacity: .9;
+        }
+
+        .filters .chip-input:focus {
+            outline: 0;
+            border-color: #8ff3ff;
+            box-shadow: 0 0 0 3px rgba(34,211,238,.35), inset 0 1px 0 rgba(255,255,255,.35);
+        }
+       
+        .filters .chip-input option {
+            background-color: var(--chipA);
+            color: var(--chipText);
+        }
+
+    
+    .smestaj-card .card-body {
+        background: linear-gradient(180deg,rgba(7,31,53,.92),rgba(10,66,89,.94));
+        border-top: 1px solid rgba(255,255,255,.12);
+        border-radius: 0 0 18px 18px;
+        color: #eef9ff;
+    }
+
+    .smestaj-card h5 {
+        color: #fff;
+    }
+
+    
+    .jedinice-table {
+        overflow: hidden;
+        border-radius: 12px !important;
+        background: rgba(255,255,255,.03);
+    }
+
+        .jedinice-table thead th {
+            background: linear-gradient(90deg,#0e7490,#22d3ee) !important;
+            color: #062a3a !important;
+            border: none !important;
+            font-weight: 800;
+            letter-spacing: .2px;
+        }
+
+        .jedinice-table tbody tr:nth-child(odd) {
+            background: rgba(255,255,255,.03);
+        }
+
+        .jedinice-table tbody tr:hover {
+            background: rgba(255,255,255,.06);
+        }
+
+        .jedinice-table td, .jedinice-table th {
+            border-color: rgba(255,255,255,.12) !important;
+        }
+
+        .jedinice-table td {
+            color: #eaf7ff;
+        }
+
+   
+    .rating {
+        color: #facc15;
+        letter-spacing: .08em;
+    }
+
+    .text-muted {
+        color: var(--text-dim) !important;
+    }
+
+   
+    .comments-wrap {
+        margin-top: 12px;
+        background: linear-gradient(180deg,rgba(6,31,53,.92),rgba(9,86,112,.92));
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 28px rgba(0,0,0,.18);
+    }
+
+        .comments-wrap .comments-header {
+            padding: 12px 14px;
+            font-weight: 800;
+            letter-spacing: .2px;
+            background: linear-gradient(90deg,rgba(34,211,238,.25),rgba(14,116,144,.35));
+            border-bottom: 1px solid rgba(255,255,255,.14);
+            color: #062a3a;
+        }
+
+        .comments-wrap .comments-body, .comments-wrap .comments-body * {
+            background: transparent !important;
+            color: #eaf7ff !important;
+        }
+
+            .comments-wrap .comments-body .table thead th {
+                background: linear-gradient(90deg,#0e7490,#22d3ee) !important;
+                color: #062a3a !important;
+                border: none !important;
+            }
+
+            .comments-wrap .comments-body .table, .comments-wrap .comments-body .panel, .comments-wrap .comments-body .list-group-item {
+                border-color: rgba(255,255,255,.14) !important;
+            }
+
+                .comments-wrap .comments-body .table tbody tr:nth-child(odd) {
+                    background: rgba(255,255,255,.03) !important;
+                }
+
+                .comments-wrap .comments-body .table tbody tr:hover {
+                    background: rgba(255,255,255,.06) !important;
+                }
+
+            .comments-wrap .comments-body > div, .comments-wrap .comments-body > li, .comments-wrap .comments-body > article {
+                padding: 12px 14px;
+                border-bottom: 1px dashed rgba(255,255,255,.14);
+            }
+
+            .comments-wrap .comments-body > :last-child {
+                border-bottom: none;
+            }
+
+    .program-section .card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+    }
+
+    .program-section .card-header {
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .filters-section .card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+    }
+
+    .filters-section .card-header {
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .smestaji-section {
+        margin-top: 3rem;
+    }
+</style>
+
+<div class="container my-5">
+    @if (TempData["RezervacijaOK"] != null)
+    {
+        <div class="alert alert-success">@TempData["RezervacijaOK"]</div>
+    }
+    @if (TempData["RezervacijaERR"] != null)
+    {
+        <div class="alert alert-danger">@TempData["RezervacijaERR"]</div>
+    }
+
+
+    <!-- Hero Section -->
+    <div class="hero-section mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <div class="image-container position-relative">
+                    <img src="~/Content/Images/@Model.PosterAranzmana" class="img-fluid trip-hero" alt="@Model.Naziv" />
+                    <div class="image-overlay">
+                        <div class="badge-container">
+                            <span class="badge bg-primary px-3 py-2 rounded-pill">
+                                <i class="fas fa-users me-1"></i>
+                                @Model.MaxBrPutnika putnika
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="trip-info">
+                    <h1 class="page-title mb-3">@Model.Naziv</h1>
+                    <p class="lead text-muted mb-4">@Model.OpisAranzmana</p>
+                    <div class="trip-meta-grid">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt text-primary"></i>
+                            <div>
+                                <strong>Pocetak:</strong><br>
+                                <span>@Model.DatumPocetkaPutovanja.ToShortDateString()</span>
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-check text-success"></i>
+                            <div>
+                                <strong>Kraj:</strong><br>
+                                <span>@Model.DatumZavrsetkaPutovanja.ToShortDateString()</span>
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-plane text-info"></i>
+                            <div>
+                                <strong>Prevoz:</strong><br>
+                                <span>@Model.tipPrevoza</span>
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt text-warning"></i>
+                            <div>
+                                <strong>Lokacija:</strong><br>
+                                <span>@Model.lokacija</span>
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-bed text-secondary"></i>
+                            <div>
+                                <strong>Tip aranzmana:</strong><br>
+                                <span>@Model.tipAranzmana</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Program Section -->
+    <div class="program-section mb-5">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="fw-bold mb-0">
+                    <i class="fas fa-map-marked-alt me-2"></i>
+                    Program putovanja
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-0 text-muted">@Model.ProgramPutovanja</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section mb-5">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="fw-bold mb-0">
+                    <i class="fas fa-filter me-2"></i>
+                    Filtriranje i sortiranje smestaja
+                </h5>
+            </div>
+            <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-2">
+                <input type="text" id="filterNaziv" class="form-control chip-input" placeholder="Naziv smestaja" />
+            </div>
+            <div class="col-md-2">
+                <select id="filterTip" class="form-select chip-input">
+                    <option value="">Svi tipovi</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="vila">Vila</option>
+                    <option value="motel">Motel</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="filterBazen" class="form-select chip-input">
+                    <option value="">Bazen</option>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="filterSpa" class="form-select chip-input">
+                    <option value="">Spa</option>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="filterWifi" class="form-select chip-input">
+                    <option value="">WiFi</option>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="filterInvaliditet" class="form-select chip-input">
+                    <option value="">Prilagodjeno</option>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <input type="number" id="minGostiju" class="form-control chip-input" placeholder="Min gostiju" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="maxGostiju" class="form-control chip-input" placeholder="Max gostiju" />
+            </div>
+            <div class="col-md-2">
+                <select id="filterLjubimci" class="form-select chip-input">
+                    <option value="">Ljubimci</option>
+                    <option value="true">Da</option>
+                    <option value="false">Ne</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="number" id="maxCena" class="form-control chip-input" placeholder="Max cena (EUR)" />
+            </div>
+            <div class="col-md-2">
+                <select id="sortSmestaji" class="form-select chip-input">
+                    <option value="">Sortiraj smestaje</option>
+                    <option value="nazivAsc">Naziv ↑</option>
+                    <option value="nazivDesc">Naziv ↓</option>
+                    <option value="jediniceAsc">Jedinice ↑</option>
+                    <option value="jediniceDesc">Jedinice ↓</option>
+                    <option value="slobodneAsc">Slobodne ↑</option>
+                    <option value="slobodneDesc">Slobodne ↓</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="sortJedinice" class="form-select chip-input">
+                    <option value="">Sortiraj jedinice</option>
+                    <option value="gostAsc">Gostiju ↑</option>
+                    <option value="gostDesc">Gostiju ↓</option>
+                    <option value="cenaAsc">Cena ↑</option>
+                    <option value="cenaDesc">Cena ↓</option>
+                </select>
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <button id="applyFilters" class="btn btn-primary me-2">Primeni</button>
+                <button id="resetFilters" class="btn btn-secondary">Resetuj</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smeštaji Section -->
+    <div class="smestaji-section">
+        <h3 class="section-title mb-4">
+            <i class="fas fa-bed me-3"></i>
+            Smestaji
+        </h3>
+        <div class="row" id="smestajiContainer">
+        @if (smestaji.Any())
+        {
+            foreach (var sm in smestaji)
+            {
+                int brojSlobodnih = sm.SmestajneJedinicee?.Count(j => j.Status == MyWebApp.Models.StatusSmestajneJedinice.Slobodna) ?? 0;
+                <div class="col-md-12 mb-4 smestaj-card"
+                     data-naziv="@sm.Naziv"
+                     data-tip="@sm.tipSmestaja.ToString().ToLower()"
+                     data-bazen="@sm.PostojanjeBazena.ToString().ToLower()"
+                     data-spa="@sm.PostojanjeSpaCentra.ToString().ToLower()"
+                     data-wifi="@sm.wifi.ToString().ToLower()"
+                     data-invaliditet="@sm.PrilagodjenoZaOsobeSaInvaliditeton.ToString().ToLower()"
+                     data-jedinice="@sm.SmestajneJedinicee.Count"
+                     data-slobodne="@brojSlobodnih">
+                    <div class="card shadow-sm border-0 rounded-4 h-100">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-1">@sm.Naziv (@sm.tipSmestaja)</h5>
+
+                            @if (sm.tipSmestaja.ToString().Equals("hotel", StringComparison.OrdinalIgnoreCase) && sm.BrojZvezdica > 0)
+                            {
+                                var stars = Math.Max(0, Math.Min(5, (int)sm.BrojZvezdica));
+                                <div class="rating small mb-2" title="@sm.BrojZvezdica zvezdice">
+                                    @for (int i = 0; i < stars; i++)
+                                    {
+                                        <span class="text-warning">★</span>
+                                    }
+                                    @for (int i = stars; i < 5; i++)
+                                    {
+                                        <span class="text-muted">☆</span>
+                                    }
+                                </div>
+                            }
+
+                            <p class="text-muted mb-2">
+                                <strong>Bazen:</strong> @(sm.PostojanjeBazena ? "Da" : "Ne") |
+                                <strong>Spa:</strong> @(sm.PostojanjeSpaCentra ? "Da" : "Ne") |
+                                <strong>WiFi:</strong> @(sm.wifi ? "Da" : "Ne") |
+                                <strong>Prilagođeno:</strong> @(sm.PrilagodjenoZaOsobeSaInvaliditeton ? "Da" : "Ne")
+                            </p>
+                            <p class="text-muted">
+                                <strong>Ukupno jedinica:</strong> @sm.SmestajneJedinicee.Count |
+                                <strong>Slobodnih:</strong> @brojSlobodnih
+                            </p>
+
+                            <h6 class="fw-bold mt-3">Smestajne jedinice</h6>
+                            @if (sm.SmestajneJedinicee != null && sm.SmestajneJedinicee.Any())
+                            {
+                                <table class="table table-sm table-bordered rounded jedinice-table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Gostiju</th>
+                                            <th>Ljubimci</th>
+                                            <th>Cena (EUR)</th>
+                                            <th>Status / Akcija</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var j in sm.SmestajneJedinicee)
+                                        {
+                                            <tr class="jedinica-row"
+                                                data-gostiju="@j.DozvoljenBrojGostiju"
+                                                data-ljubimci="@j.DozvoljeniKucniLjubimci.ToString().ToLower()"
+                                                data-cena="@j.CenaZaCeluSmestajnuJedinicu">
+                                                <td>@j.DozvoljenBrojGostiju</td>
+                                                <td>@(j.DozvoljeniKucniLjubimci ? "Da" : "Ne")</td>
+                                                <td>@j.CenaZaCeluSmestajnuJedinicu</td>
+
+                                                @{
+                                                    var user = Session["Korisnik"] as MyWebApp.Models.Korisnik;
+                                                    var rezRepo = new MyWebApp.Repositories.RezervacijaRepository();
+                                                    var mojaRez = user == null ? null :
+                                                        rezRepo.GetAll().FirstOrDefault(r =>
+                                                            r.TuristaKojiVrsiRezervaciju == user.KorisnickoIme &&
+                                                            r.AranzmanId == Model.Id &&
+                                                            r.SmestajnaJedinicaId == j.Id &&
+                                                            r.status == MyWebApp.Models.Status.aktivna);
+                                                }
+
+                                                <td>
+                                                    @if (mojaRez != null)
+                                                    {
+                                                        <a class="btn btn-sm btn-danger" href="@Url.Action("Otkazi","Rezervacija",new { id = mojaRez.Id })">Otkaži</a>
+                                                    }
+                                                    else if (korisnikPrijavljen && j.Status == MyWebApp.Models.StatusSmestajneJedinice.Slobodna)
+                                                    {
+                                                        <a class="btn btn-sm btn-success" href="@Url.Action("Create","Rezervacija", new { aranzmanID = Model.Id, smestajId = sm.Id, jedinicaId = j.Id })">Rezerviši</a>
+                                                    }
+                                                    else
+                                                    { @j.Status}
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            { <p class="text-muted fst-italic">Nema smestajnih jedinica.</p>}
+
+                        </div>
+
+
+                        <div class="comments-wrap">
+                            <div class="comments-header">Komentari</div>
+                            <div class="comments-body">
+                                @Html.Action("PublicComments", "Komentar", new { smestajNaziv = sm.Naziv })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        { <p class="text-muted">Nema smestaja za ovaj aranzman.</p>}
+    </div>
+</div>
+
+<script src="~/Scripts/detalji.js"></script>

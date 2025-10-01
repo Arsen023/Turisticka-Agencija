@@ -1,0 +1,360 @@
+﻿@model MyWebApp.Models.Aranzman
+@using System
+@using System.Collections.Generic
+@{
+    ViewBag.Title = "Izmena aranžmana";
+    var smestaji = ViewBag.Smestaji as List<MyWebApp.Models.Smestaj> ?? new List<MyWebApp.Models.Smestaj>();
+    var selectedIds = (Model != null && Model.SmestajId != null) ? Model.SmestajId : new List<int>();
+    <script>window.APP_BASE = '@Url.Content("~/")';</script>
+}
+
+
+<div class="container page-wrap my-4">
+
+    @if (TempData["AranzmanOK"] != null)
+    {
+        <div class="alert alert-success">@TempData["AranzmanOK"]</div>
+    }
+    @if (TempData["AranzmanERR"] != null)
+    {
+        <div class="alert alert-danger">@TempData["AranzmanERR"]</div>
+    }
+
+    @using (Html.BeginForm("Edit", "MenadzerAranzman", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", novalidate = "novalidate" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+
+        <style>
+            :root {
+                --c-deep: #0b2447;
+                --c-mid: #0e7490;
+                --c-sky: #22d3ee;
+                --glass: rgba(255,255,255,.08);
+                --stroke: rgba(255,255,255,.18);
+                --text: #f8fafc;
+                --text-dim: #cfe7f2;
+            }
+
+            body {
+                min-height: 100vh;
+                background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg,var(--c-deep) 0%,#0a3a5a 35%,var(--c-mid) 68%,var(--c-sky) 110%);
+                color: var(--text);
+            }
+
+                body::before {
+                    content: "";
+                    position: fixed;
+                    inset: 0;
+                    pointer-events: none;
+                    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+                    mix-blend-mode: overlay;
+                }
+
+            .page-wrap {
+                max-width: 1100px;
+            }
+
+            .section {
+                background: var(--glass);
+                border: 1px solid var(--stroke);
+                border-radius: 18px;
+                padding: 22px;
+                margin-bottom: 16px;
+                box-shadow: 0 10px 30px rgba(0,0,0,.22);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                color: var(--text);
+            }
+
+            .section-title {
+                display: flex;
+                align-items: center;
+                gap: .6rem;
+                margin-bottom: 14px;
+            }
+
+                .section-title .dot {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: #22d3ee;
+                    box-shadow: 0 0 0 5px rgba(34,211,238,.18);
+                }
+
+                .section-title h5 {
+                    margin: 0;
+                    font-weight: 900;
+                    letter-spacing: .3px;
+                    background: linear-gradient(90deg,#fff,#e9f8ff 45%,#ffffff);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                    text-shadow: 0 2px 20px rgba(34,211,238,.15);
+                }
+
+                .section-title .line {
+                    flex: 1;
+                    height: 1px;
+                    background: linear-gradient(90deg, rgba(34,211,238,.35), rgba(255,255,255,0));
+                }
+
+            .help {
+                font-size: .85rem;
+                color: var(--text-dim);
+            }
+
+            .form-control, .form-select {
+                border-radius: 12px;
+                border: 1px solid rgba(255,255,255,.28);
+                background: rgba(255,255,255,.07);
+                color: #fff;
+            }
+
+                .form-control::placeholder {
+                    color: #d7eef6;
+                    opacity: .85;
+                }
+
+            .btn {
+                border: none;
+                border-radius: 12px;
+                font-weight: 900;
+                letter-spacing: .2px;
+                box-shadow: 0 10px 24px rgba(0,0,0,.22);
+            }
+
+            .btn-primary {
+                background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+                color: #053b4c;
+            }
+
+            .btn-outline-secondary {
+                color: #eaf7ff;
+                border: 1px solid rgba(255,255,255,.5);
+            }
+
+                .btn-outline-secondary:hover {
+                    background: rgba(255,255,255,.12);
+                }
+
+            .sticky-actions {
+                position: sticky;
+                bottom: 0;
+                z-index: 10;
+                background: linear-gradient(180deg, rgba(255,255,255,0), rgba(6,31,53,.35) 40%);
+                padding-top: 12px;
+            }
+
+            .preview {
+                border-radius: 14px;
+                border: 1px dashed rgba(255,255,255,.28);
+                min-height: 180px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                background: rgba(255,255,255,.05);
+            }
+
+                .preview img {
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                    opacity: 0;
+                    transition: opacity .2s;
+                }
+
+            .listbox-wrap {
+                display: flex;
+                gap: 12px;
+                align-items: stretch;
+            }
+
+            #smSearch {
+                background: rgba(255,255,255,.07);
+                color: #fff;
+            }
+
+            #smList {
+                background: rgba(6,31,53,.9);
+                color: #eaf7ff;
+                border: 1px solid var(--stroke);
+                border-radius: 12px;
+                padding: 8px;
+            }
+
+                #smList option {
+                    padding: 4px 6px;
+                }
+        </style>
+
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger mb-3" })
+
+        <div class="section">
+            <div class="section-title">
+                <div class="dot"></div><h5>Osnovne informacije</h5><div class="line"></div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <label class="form-label">Naziv</label>
+                    @Html.TextBoxFor(m => m.Naziv, new { @class = "form-control form-control-lg", required = "required", placeholder = "npr. Pariz – vikend tura" })
+                    @Html.ValidationMessageFor(m => m.Naziv, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-lg-3">
+                    <label class="form-label">Tip aranžmana</label>
+                    @Html.DropDownListFor(m => m.tipAranzmana,
+                        new SelectList(new[] { "nocenje_sa_doruckom", "polupansion", "pun_pansion", "all_inclusive", "najam_apartamana" }, Model.tipAranzmana),
+                        "-- izaberi --",
+                        new { @class = "form-select text-bg-info", required = "required" })
+                    @Html.ValidationMessageFor(m => m.tipAranzmana, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-lg-3">
+                    <label class="form-label">Tip prevoza</label>
+                    @Html.DropDownListFor(m => m.tipPrevoza,
+                        new SelectList(new[] { "autobus", "avion", "autobus_avion", "individualan", "ostalo" }, Model.tipPrevoza),
+                        "-- izaberi --",
+                        new { @class = "form-select text-bg-info", required = "required" })
+                    @Html.ValidationMessageFor(m => m.tipPrevoza, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Lokacija <span class="help">(grad, država, regija)</span></label>
+                    @Html.TextBoxFor(m => m.lokacija, new { @class = "form-control", required = "required", placeholder = "npr. Pariz, Francuska, Île-de-France" })
+                    @Html.ValidationMessageFor(m => m.lokacija, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <div class="dot"></div><h5>Termin i kapacitet</h5><div class="line"></div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label">Datum početka putovanja</label>
+
+                    <input type="date"
+                           id="dpStart"
+                           class="form-control"
+                           required
+                           value="@(Model != null ? Model.DatumPocetkaPutovanja.ToString("yyyy-MM-dd") : "")" />
+
+                    <input type="hidden"
+                           id="DatumPocetkaPutovanja"
+                           name="DatumPocetkaPutovanja"
+                           value="@(Model != null ? Model.DatumPocetkaPutovanja.ToString("dd/MM/yyyy") : "")" />
+                    @Html.ValidationMessageFor(m => m.DatumPocetkaPutovanja, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Datum završetka putovanja</label>
+                    <input type="date"
+                           id="dpEnd"
+                           class="form-control"
+                           required
+                           value="@(Model != null ? Model.DatumZavrsetkaPutovanja.ToString("yyyy-MM-dd") : "")" />
+                    <input type="hidden"
+                           id="DatumZavrsetkaPutovanja"
+                           name="DatumZavrsetkaPutovanja"
+                           value="@(Model != null ? Model.DatumZavrsetkaPutovanja.ToString("dd/MM/yyyy") : "")" />
+                    @Html.ValidationMessageFor(m => m.DatumZavrsetkaPutovanja, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Maksimalan broj putnika</label>
+                    @Html.TextBoxFor(m => m.MaxBrPutnika, new { @class = "form-control", type = "number", min = "1", step = "1", required = "required" })
+                    @Html.ValidationMessageFor(m => m.MaxBrPutnika, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <div class="dot"></div><h5>Sadržaj</h5><div class="line"></div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <label class="form-label">Opis aranžmana</label>
+                    @Html.TextAreaFor(m => m.OpisAranzmana, new { @class = "form-control", rows = 5, required = "required" })
+                    @Html.ValidationMessageFor(m => m.OpisAranzmana, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-lg-5">
+                    <label class="form-label">Poster aranžmana</label>
+                    @Html.TextBoxFor(m => m.PosterAranzmana, new { @class = "form-control", required = "required", placeholder = "npr. pariz.jpg (u /Content/Images)", @id = "PosterAranzmana" })
+                    <div class="help mt-1">Biće prikazan pre-gled ispod ako je fajl dostupan.</div>
+
+                    @{
+                        string poster = Model != null ? (Model.PosterAranzmana ?? "") : "";
+                        Func<string, string> toSrc = v =>
+                        {
+                            if (string.IsNullOrWhiteSpace(v)) return "";
+                            if (v.StartsWith("http", StringComparison.OrdinalIgnoreCase)) return v;
+                            if (v.StartsWith("~/")) return Url.Content(v);
+                            if (v.Contains("/")) return Url.Content(v);
+                            return Url.Content("~/Content/Images/" + v);
+                        };
+                        string initialSrc = toSrc(poster);
+                    }
+
+                    <div class="preview mt-2">
+                        <img id="posterPreview" src="@initialSrc" alt="Poster preview" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.PosterAranzmana, "", new { @class = "text-danger" })
+
+
+                    <button type="button" id="btnChangePoster" class="btn btn-outline-secondary mt-3">Promeni sliku</button>
+                    <input type="file" id="PosterFile" name="PosterFile" accept="image/*" class="d-none" />
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Program putovanja</label>
+                    @Html.TextAreaFor(m => m.ProgramPutovanja, new { @class = "form-control", rows = 7, required = "required" })
+                    @Html.ValidationMessageFor(m => m.ProgramPutovanja, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">
+                <div class="dot"></div><h5>Smeštaji u aranžmanu</h5><div class="line"></div>
+            </div>
+
+            <div class="listbox-wrap">
+                <div class="flex-grow-1">
+                    <input id="smSearch" class="form-control mb-2" type="text" placeholder="Pretraga smeštaja…" />
+                    @Html.ListBoxFor(m => m.SmestajId,
+                        new MultiSelectList(smestaji, "Id", "Naziv", selectedIds),
+                        new { @class = "form-select", multiple = "multiple", size = "10", required = "required", @id = "smList" })
+                    <div class="d-flex justify-content-between mt-2">
+                        <span class="help" id="smCount"></span>
+                        <div class="help">
+                            <a href="#" id="smSelectAll">označi sve</a> •
+                            <a href="#" id="smClear">očisti</a>
+                        </div>
+                    </div>
+                    @Html.ValidationMessage("SmestajId", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky-actions">
+            <div class="d-flex gap-2 pt-2">
+                <button type="submit" class="btn btn-primary btn-lg px-4">Sačuvaj</button>
+                @Html.ActionLink("Nazad", "Index", "MenadzerAranzman", null, new { @class = "btn btn-outline-secondary btn-lg" })
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts{
+    <script src="~/Scripts/menadzerAranzmanEditjs.js"></script>
+    <script src="~/Scripts/date-ddmmyyyy-picker.js"></script>
+    <script src="~/Scripts/poster-upload.js"></script>
+}

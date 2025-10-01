@@ -1,0 +1,198 @@
+@model MyWebApp.Models.Rezervacija
+@using System.Globalization
+
+@{
+    ViewBag.Title = "Detalji rezervacije";
+
+    
+    var a = ViewBag.Aranzman as MyWebApp.Models.Aranzman;
+    var jed = ViewBag.SmestajnaJedinica as MyWebApp.Models.SmestajnaJedinica;
+
+    string smestajNaziv = ViewBag.SmestajNaziv as string;
+    string dp = ViewBag.DatumPocetka as string;   
+    string dz = ViewBag.DatumZavrsetka as string; 
+
+    var statusText = Model.status.ToString();
+    var statusLower = statusText.ToLowerInvariant();
+    var badgeClass = statusLower.Contains("aktivna") ? "badge-ok"
+                 : statusLower.Contains("otkazana") ? "badge-bad"
+                 : "badge-muted";
+}
+
+<style>
+    :root{
+        --c-deep:#0b2447; --c-mid:#0e7490; --c-sky:#22d3ee;
+        --glass:rgba(255,255,255,.08); --stroke:rgba(255,255,255,.18);
+        --txt:#f8fafc; --dim:#cfe7f2;
+    }
+
+    
+    body{
+        min-height:100vh;
+        background:
+          radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%),
+          radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%),
+          linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color:var(--txt);
+    }
+    body::before{
+        content:""; position:fixed; inset:0; pointer-events:none;
+        background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+        mix-blend-mode:overlay;
+    }
+
+    
+    .card.glass{
+        background:var(--glass);
+        border:1px solid var(--stroke);
+        border-radius:18px;
+        backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+        box-shadow:0 12px 30px rgba(0,0,0,.25);
+        color:var(--txt);
+        overflow:hidden;
+    }
+    .card.glass .card-header{
+        background:linear-gradient(90deg,#0e7490,#22d3ee)!important;
+        color:#062a3a!important;
+        border:none;
+        font-weight:800; letter-spacing:.3px;
+    }
+
+    .subtle{
+        color:var(--dim);
+    }
+
+   
+    .info-grid{
+        display:grid; grid-template-columns: repeat(2,minmax(0,1fr));
+        gap:12px;
+    }
+    @@media (max-width: 768px){
+        .info-grid{ grid-template-columns:1fr; }
+    }
+    .info-item{
+        background:rgba(255,255,255,.06);
+        border:1px solid rgba(255,255,255,.12);
+        border-radius:12px;
+        padding:12px 14px;
+    }
+    .info-item strong{ color:#e9fbff; }
+
+    
+    .badge-chip{
+        display:inline-block; padding:.45em .7em; border-radius:999px;
+        font-weight:800; letter-spacing:.2px;
+        border:1px solid rgba(0,0,0,.06);
+    }
+    .badge-ok{
+        background:linear-gradient(90deg,#16a34a,#22c55e); color:#052a37;
+    }
+    .badge-bad{
+        background:linear-gradient(90deg,#ef4444,#f97316); color:#fff;
+    }
+    .badge-muted{
+        background:linear-gradient(90deg,#64748b,#94a3b8); color:#051821;
+    }
+
+    
+    .section-title{
+        font-weight:800; letter-spacing:.2px; color:#eaf7ff;
+    }
+    .divider{
+        height:1px; background:rgba(255,255,255,.12);
+        margin:14px 0;
+    }
+
+   
+    .btn{ border:none; font-weight:700; letter-spacing:.2px; border-radius:12px; box-shadow:0 10px 24px rgba(0,0,0,.22); }
+    .btn-primary{ background:linear-gradient(90deg,#0ea5e9,#22d3ee); color:#053b4c; }
+    .btn-secondary{ background:linear-gradient(90deg,#64748b,#94a3b8); color:#051821; }
+
+    
+    .panel-soft{
+        background:linear-gradient(180deg, rgba(7,31,53,.92), rgba(10,66,89,.94));
+        border:1px solid rgba(255,255,255,.12);
+        border-radius:14px;
+        padding:14px;
+    }
+</style>
+
+<div class="container my-4">
+    <div class="card glass">
+        <div class="card-header">
+            <div class="d-flex flex-wrap align-items-center justify-content-between">
+                <div>Detalji rezervacije <strong>#@Model.Id</strong></div>
+                <span class="badge-chip @badgeClass">@statusText</span>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+           
+            <div class="mb-3">
+                <h4 class="mb-1 section-title">
+                    @((a?.Naziv) ?? "—")
+                </h4>
+                @if (a != null && !string.IsNullOrWhiteSpace(a.OpisAranzmana))
+                {
+                    <div class="subtle">@a.OpisAranzmana</div>
+                }
+            </div>
+
+            <div class="divider"></div>
+
+            
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="subtle">Pocetak</div>
+                            <strong>@dp</strong>
+                        </div>
+                        <div class="info-item">
+                            <div class="subtle">Kraj</div>
+                            <strong>@dz</strong>
+                        </div>
+                        <div class="info-item">
+                            <div class="subtle">Prevoz</div>
+                            <strong>@(a!=null ? a.tipPrevoza.ToString() : "—")</strong>
+                        </div>
+                        <div class="info-item">
+                            <div class="subtle">Lokacija</div>
+                            <strong>@(a!=null ? a.lokacija.ToString() : "—")</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="panel-soft">
+                        <h6 class="section-title mb-2">Smestaj i jedinica</h6>
+                        <div class="mb-1"><span class="subtle">Smestaj:</span> <strong>@(smestajNaziv ?? "—")</strong></div>
+                        @if (jed != null)
+                        {
+                            <div class="mb-1"><span class="subtle">Kapacitet jedinice:</span> <strong>@jed.DozvoljenBrojGostiju</strong></div>
+                            <div class="mb-1"><span class="subtle">Cena:</span> <strong>@jed.CenaZaCeluSmestajnuJedinicu.ToString("0.##") €</strong></div>
+                            <div class="mb-1"><span class="subtle">Status jedinice:</span> <strong>@jed.Status</strong></div>
+                        }
+                        else
+                        {
+                            <div class="subtle">Detalji jedinice nisu dostupni.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer d-flex gap-2 justify-content-between flex-wrap">
+            <a class="btn btn-secondary" href="@Url.Action("Index","Rezervacija")">Nazad</a>
+
+            @if ((bool)(ViewBag.MozeKomentar ?? false))
+            {
+                <a href="@Url.Action("Create", "Komentar", new { smestajNaziv = ViewBag.SmestajNaziv })"
+                   class="btn btn-primary">
+                    Ostavi komentar
+                </a>
+            }
+        </div>
+    </div>
+</div>
+

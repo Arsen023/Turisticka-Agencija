@@ -1,0 +1,412 @@
+@model List<MyWebApp.Models.Korisnik>
+@using MyWebApp.Models
+@{
+    ViewBag.Title = "Korisnici (administrator)";
+    string q = ViewBag.Q as string ?? "";
+    string uloga = ViewBag.Uloga as string ?? "";
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --txt: #f8fafc;
+        --dim: #cfe7f2;
+        --ink: #062a3a;
+        --chipA: #15c1d1;
+        --chipB: #22d3ee;
+        --chipText: #052a37;
+    }
+
+    
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--txt);
+    }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+        }
+
+    .page-title {
+        font-weight: 800;
+        letter-spacing: .3px;
+        margin: .25rem 0 1rem;
+        background: linear-gradient(90deg,#fff,#e9f8ff 45%,#fff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 20px rgba(34,211,238,.15);
+    }
+
+    .muted {
+        color: var(--dim);
+    }
+
+
+    .glass {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+
+   
+    .form-control, .form-select {
+        border-radius: 12px !important;
+        border: 1px solid rgba(255,255,255,.35) !important;
+        background: linear-gradient(90deg,var(--chipA),var(--chipB)) !important;
+        color: var(--chipText) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 8px 16px rgba(0,0,0,.18);
+    }
+
+        .form-control::placeholder {
+            color: #000;
+            opacity: .85;
+        }
+
+        .form-select option {
+            color: #052a37;
+            background: #bdf3ff;
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: 0;
+            border-color: #9ff7ff !important;
+            box-shadow: 0 0 0 4px rgba(34,211,238,.35), inset 0 1px 0 rgba(255,255,255,.45) !important;
+        }
+
+   
+    .btn {
+        border: none;
+        font-weight: 700;
+        letter-spacing: .2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-success {
+        background: linear-gradient(90deg,#16a34a,#22c55e);
+        color: #052a37;
+    }
+
+  
+    .card-head {
+        border-radius: 18px 18px 0 0;
+    }
+
+    .filter-bar {
+        padding: 14px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(6,31,53,.92), rgba(9,86,112,.92));
+        border: 1px solid rgba(255,255,255,.14);
+    }
+
+   
+    .table-wrap {
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+    }
+
+    table.table {
+        margin: 0;
+        background: rgba(255,255,255,.03);
+        color: #eaf7ff;
+    }
+
+    .table thead th {
+        background: linear-gradient(90deg,#0e7490,#22d3ee) !important;
+        color: var(--ink) !important;
+        border: none !important;
+        font-weight: 800;
+        letter-spacing: .2px;
+        vertical-align: middle;
+    }
+
+    .table tbody td, .table tbody th {
+        border-color: rgba(255,255,255,.12) !important;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background: rgba(255,255,255,.03);
+    }
+
+    .table tbody tr:hover {
+        background: rgba(255,255,255,.07);
+    }
+
+    
+    .badge {
+        padding: .45em .6em;
+        font-weight: 800;
+        letter-spacing: .2px;
+        border-radius: 999px;
+    }
+
+    .role-admin {
+        background: linear-gradient(90deg,#111827,#6b7280);
+        color: #fff;
+    }
+
+    .role-man {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .role-tur {
+        background: linear-gradient(90deg,#64748b,#94a3b8);
+        color: #051821;
+    }
+
+    .admin-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 2rem;
+    }
+
+    .table-header {
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .empty-state {
+        padding: 3rem 2rem;
+    }
+
+    .btn-group .btn {
+        margin: 0 2px;
+        border-radius: 8px;
+    }
+
+    .btn-outline-primary {
+        border-color: rgba(79, 172, 254, 0.5);
+        color: #4facfe;
+    }
+
+    .btn-outline-primary:hover {
+        background: #4facfe;
+        border-color: #4facfe;
+        color: white;
+    }
+
+    .btn-outline-warning {
+        border-color: rgba(217, 119, 6, 0.5);
+        color: #d97706;
+    }
+
+    .btn-outline-warning:hover {
+        background: #d97706;
+        border-color: #d97706;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        border-color: rgba(239, 68, 68, 0.5);
+        color: #ef4444;
+    }
+
+    .btn-outline-danger:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: white;
+    }
+
+    .btn-outline-secondary {
+        border-color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-outline-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.8);
+        color: white;
+    }
+</style>
+
+<div class="container my-4">
+    <!-- Header Section -->
+    <div class="admin-header mb-4">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h2 class="page-title mb-2">
+                    <i class="fas fa-users me-3"></i>
+                    Korisnici sistema
+                </h2>
+                <p class="muted mb-0">Pregled svih korisnika sa pretragom i filtriranjem</p>
+            </div>
+            <div>
+                @Html.ActionLink("Novi menadžer", "CreateManager", "Admin", null, new { @class = "btn btn-success btn-lg" })
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    @if (TempData["OK"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["OK"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Filters Section -->
+    <div class="glass p-4 mb-4">
+        <h5 class="mb-3">
+            <i class="fas fa-filter me-2"></i>
+            Pretraga i filtriranje
+        </h5>
+        @using (Html.BeginForm("Users", "Admin", FormMethod.Get, new { @class = "row g-3 align-items-end" }))
+        {
+            <div class="col-md-5">
+                <label class="form-label">
+                    <i class="fas fa-search me-1"></i>
+                    Pretraga po imenu/prezimenu
+                </label>
+                <input type="text" name="q" value="@q" class="form-control" placeholder="npr. Ana ili Petrović" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">
+                    <i class="fas fa-user-tag me-1"></i>
+                    Uloga
+                </label>
+                <select name="uloga" class="form-select">
+                    <option value="">Sve uloge</option>
+                    <option value="Administrator" @(uloga == "Administrator" ? "selected" : "")>Administrator</option>
+                    <option value="Menadzer" @(uloga == "Menadzer" ? "selected" : "")>Menadžer</option>
+                    <option value="Turista" @(uloga == "Turista" ? "selected" : "")>Turista</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-primary">
+                    <i class="fas fa-search me-1"></i>
+                    Pretraži
+                </button>
+            </div>
+            <div class="col-md-2 d-grid">
+                <a href="@Url.Action("Users", "Admin")" class="btn btn-outline-secondary">
+                    <i class="fas fa-refresh me-1"></i>
+                    Resetuj
+                </a>
+            </div>
+        }
+    </div>
+
+    <!-- Users Table -->
+    <div class="glass table-wrap">
+        <div class="table-header p-3">
+            <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>
+                Lista korisnika (@(Model?.Count ?? 0))
+            </h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>
+                            <i class="fas fa-user me-1"></i>
+                            Korisničko ime
+                        </th>
+                        <th>
+                            <i class="fas fa-id-card me-1"></i>
+                            Ime i prezime
+                        </th>
+                        <th>
+                            <i class="fas fa-envelope me-1"></i>
+                            Email
+                        </th>
+                        <th>
+                            <i class="fas fa-user-tag me-1"></i>
+                            Uloga
+                        </th>
+                        <th class="text-center">
+                            <i class="fas fa-cog me-1"></i>
+                            Akcije
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var k in Model)
+                        {
+                            var roleClass = k.uloga == Uloga.Administrator ? "role-admin"
+                                           : k.uloga == Uloga.Menadzer ? "role-man"
+                                           : "role-tur";
+                            var roleIcon = k.uloga == Uloga.Administrator ? "fas fa-shield-alt"
+                                         : k.uloga == Uloga.Menadzer ? "fas fa-cogs"
+                                         : "fas fa-user";
+                            <tr>
+                                <td class="fw-semibold">
+                                    <i class="@roleIcon me-2"></i>
+                                    @k.KorisnickoIme
+                                </td>
+                                <td>@k.Ime @k.Prezime</td>
+                                <td>
+                                    <a href="mailto:@k.Email" class="text-decoration-none">
+                                        <i class="fas fa-envelope me-1"></i>
+                                        @k.Email
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="badge @roleClass">
+                                        <i class="@roleIcon me-1"></i>
+                                        @k.uloga
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" title="Pregled">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning btn-sm" title="Izmeni">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" title="Obriši">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="empty-state">
+                                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">Nema rezultata</h5>
+                                    <p class="text-muted">Pokušajte da promenite kriterijume pretrage</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

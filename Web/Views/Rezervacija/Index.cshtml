@@ -1,0 +1,303 @@
+@model List<MyWebApp.Models.Rezervacija>
+@using System.Linq
+
+@{
+    ViewBag.Title = "Moje rezervacije";
+
+    
+    var aranzmani = ViewBag.Aranzmani as List<MyWebApp.Models.Aranzman>;
+    var smestaji = ViewBag.Smestaji as List<MyWebApp.Models.Smestaj>;
+    var jedinice = ViewBag.SmestajneJedinice as List<MyWebApp.Models.SmestajnaJedinica>;
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --txt: #f8fafc;
+        --dim: #cfe7f2;
+        --chipA: #15c1d1;
+        --chipB: #22d3ee;
+        --chipText: #052a37;
+    }
+
+    
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--txt);
+    }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+        }
+
+    
+    .page-title {
+        font-weight: 800;
+        letter-spacing: .3px;
+        margin-top: .25rem;
+        background: linear-gradient(90deg,#fff,#e9f8ff 45%,#ffffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 20px rgba(34,211,238,.15);
+    }
+
+    
+    .glass {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+
+    
+    .form-control, .form-select {
+        border-radius: 12px !important;
+        border: 1px solid rgba(255,255,255,.35) !important;
+        background: linear-gradient(90deg,var(--chipA),var(--chipB)) !important;
+        color: var(--chipText) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 8px 16px rgba(0,0,0,.18);
+    }
+
+        .form-control::placeholder {
+            color: #000;
+            opacity: .85;
+        }
+        
+        .form-select option {
+            color: #052a37;
+            background: #bdf3ff;
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: 0;
+            border-color: #9ff7ff !important;
+            box-shadow: 0 0 0 4px rgba(34,211,238,.35), inset 0 1px 0 rgba(255,255,255,.45) !important;
+        }
+
+    /
+    .btn {
+        border: none;
+        font-weight: 700;
+        letter-spacing: .2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-success {
+        background: linear-gradient(90deg,#16a34a,#22c55e);
+        color: #052a37;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(90deg,#64748b,#94a3b8);
+        color: #051821;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-danger {
+        background: linear-gradient(90deg,#ef4444,#f97316);
+    }
+
+    
+    .table-wrap {
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+    }
+
+    table.table {
+        margin: 0;
+        background: rgba(255,255,255,.03);
+        color: #eaf7ff;
+    }
+
+    .table thead th {
+        background: linear-gradient(90deg,#0e7490,#22d3ee) !important;
+        color: #062a3a !important;
+        border: none !important;
+        font-weight: 800;
+        letter-spacing: .2px;
+        vertical-align: middle;
+    }
+
+    .table tbody td, .table tbody th {
+        border-color: rgba(255,255,255,.12) !important;
+    }
+
+    .table tbody tr:nth-child(odd) {
+        background: rgba(255,255,255,.03);
+    }
+
+    .table tbody tr:hover {
+        background: rgba(255,255,255,.07);
+    }
+
+   
+    .badge {
+        padding: .45em .6em;
+        font-weight: 800;
+        letter-spacing: .2px;
+        border-radius: 999px;
+    }
+
+        .badge.bg-success {
+            background: linear-gradient(90deg,#16a34a,#22c55e) !important;
+            color: #052a37 !important;
+        }
+
+        .badge.bg-danger {
+            background: linear-gradient(90deg,#ef4444,#f97316) !important;
+            color: #fff !important;
+        }
+
+        .badge.bg-secondary {
+            background: linear-gradient(90deg,#64748b,#94a3b8) !important;
+            color: #051821 !important;
+        }
+
+    .muted {
+        color: var(--dim);
+    }
+</style>
+
+<div class="container my-4">
+    <h2 class="mb-3 page-title"><span class="me-2"></span>Moje rezervacije</h2>
+
+    
+    <div class="glass p-3 p-md-4 mb-4">
+        @using (Html.BeginForm("Index", "Rezervacija", FormMethod.Get))
+        {
+            <div class="row g-2 g-md-3 mb-2">
+                <div class="col-md-3">
+                    <input type="text" name="searchId" value="@Request["searchId"]"
+                           class="form-control form-control-sm" placeholder="Pretraga po ID" />
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="searchNaziv" value="@Request["searchNaziv"]"
+                           class="form-control form-control-sm" placeholder="Naziv aranzmana" />
+                </div>
+                <div class="col-md-3">
+                    <select name="searchStatus" class="form-select form-select-sm">
+                        <option value="">-- Status --</option>
+                        <option value="aktivna" @(Request["searchStatus"] == "aktivna" ? "selected" : "")>Aktivna</option>
+                        <option value="otkazana" @(Request["searchStatus"] == "otkazana" ? "selected" : "")>Otkazana</option>
+                       
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="sort" class="form-select form-select-sm">
+                        <option value="">-- Sortiraj --</option>
+                        <option value="nazivAsc" @(Request["sort"] == "nazivAsc" ? "selected" : "")>Naziv aranzmana - uzlazno</option>
+                        <option value="nazivDesc" @(Request["sort"] == "nazivDesc" ? "selected" : "")>Naziv aranzmana - opadajuce</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success btn-sm px-3">Primeni</button>
+                <a class="btn btn-secondary btn-sm px-3" href="@Url.Action("Index", "Rezervacija")">Resetuj</a>
+            </div>
+        }
+    </div>
+
+    <div class="glass table-wrap">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th style="width:5%">ID</th>
+                        <th style="width:22%">Aranzman</th>
+                        <th style="width:10%">Status</th>
+                        <th style="width:15%">Datum pocetka</th>
+                        <th style="width:15%">Datum zavrsetka</th>
+                        <th style="width:23%">Jedinica</th>
+                        <th style="width:10%">Akcija</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var r in Model)
+                        {
+                            var a = aranzmani?.FirstOrDefault(x => x.Id == r.AranzmanId);
+                            var jed = jedinice?.FirstOrDefault(x => x.Id == r.SmestajnaJedinicaId);
+
+                            string statusText = r.status.ToString();
+                            string lowerStatus = statusText.ToLowerInvariant();
+                            string badgeClass = lowerStatus.Contains("aktivna") ? "success"
+                                                 : lowerStatus.Contains("otkazana") ? "danger"
+                                                 : "secondary";
+
+                            bool prosao = (a != null && a.DatumZavrsetkaPutovanja <= DateTime.Now);
+
+                            <tr>
+                                <td class="fw-bold">@r.Id</td>
+                                <td>
+                                    <div class="fw-semibold">@((a?.Naziv) ?? "—")</div>
+                                    <div class="muted small">@((a?.OpisAranzmana) ?? "")</div>
+                                </td>
+                                <td><span class="badge bg-@badgeClass">@statusText</span></td>
+                                <td>@(a != null ? a.DatumPocetkaPutovanja.ToString("dd.MM.yyyy") : "")</td>
+                                <td>@(a != null ? a.DatumZavrsetkaPutovanja.ToString("dd.MM.yyyy") : "")</td>
+                                <td>
+                                    @if (jed != null)
+                                    {
+                                        <div>Kapacitet: @(jed.DozvoljenBrojGostiju)</div>
+                                        <div>Cena: @(jed.CenaZaCeluSmestajnuJedinicu.ToString("0.##")) €</div>
+                                    }
+                                    else
+                                    {
+                                        <span class="muted">Jedinica nije pronadjena</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary mb-1"
+                                       href="@Url.Action("Details", "Rezervacija", new { id = r.Id })">
+                                        Detalji
+                                    </a>
+
+                                    @if (!prosao && !lowerStatus.Contains("otkazan"))
+                                    {
+                                        <a class="btn btn-sm btn-danger"
+                                           href="@Url.Action("Otkazi", "Rezervacija", new { id = r.Id })">
+                                            Otkazi
+                                        </a>
+                                    }
+                                    else if (prosao)
+                                    {
+                                        <span class="small muted d-block">
+                                            Ne mozete otkazati (aranzman je prosao)
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center muted py-4">Nema rezervacija za prikaz.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

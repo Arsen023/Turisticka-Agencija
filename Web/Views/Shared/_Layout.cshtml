@@ -1,0 +1,466 @@
+﻿@using MyWebApp.Models
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title - Travel Agency</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --text-light: #ecf0f1;
+            --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --shadow-medium: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --shadow-heavy: 0 20px 40px rgba(31, 38, 135, 0.3);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Enhanced Navigation */
+        .navbar {
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+            text-decoration: none;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-primary) !important;
+            padding: 0.75rem 1rem !important;
+            border-radius: 12px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-gradient);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .nav-link:hover::before {
+            left: 0;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        /* Enhanced Cards */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .card img {
+            transition: var(--transition);
+        }
+
+        .card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(86, 171, 47, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid;
+            border-image: var(--accent-gradient) 1;
+            color: var(--text-primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--accent-gradient);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Footer */
+        footer {
+            background: var(--dark-gradient);
+            color: var(--text-light);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(240, 147, 251, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        footer p {
+            margin: 0;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main Content */
+        main {
+            min-height: calc(100vh - 200px);
+            padding: 2rem 0;
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+            
+            .nav-link {
+                padding: 0.5rem 0.75rem !important;
+                margin: 0.25rem 0;
+            }
+            
+            .card:hover {
+                transform: translateY(-4px) scale(1.01);
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gradient);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "Home")">
+                <i class="fas fa-plane me-2"></i>
+                <span>Travel Agency</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="@Url.Action("Index", "Home")">
+                            <i class="fas fa-home me-1"></i>
+                            <span>Početna</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    @if (Session["Korisnik"] == null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" href="@Url.Action("Login", "Korisnik")">
+                                <i class="fas fa-sign-in-alt me-1"></i>
+                                <span>Prijava</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" href="@Url.Action("Register", "Korisnik")">
+                                <i class="fas fa-user-plus me-1"></i>
+                                <span>Registracija</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        var user = (Korisnik)Session["Korisnik"];
+                        
+                        if (user.uloga == Uloga.Turista)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("Index", "Rezervacija")">
+                                    <i class="fas fa-calendar-check me-1"></i>
+                                    <span>Moje rezervacije</span>
+                                </a>
+                            </li>
+                        }
+
+                        if (user.uloga == Uloga.Menadzer)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("Index", "MenadzerAranzman")">
+                                    <i class="fas fa-map-marked-alt me-1"></i>
+                                    <span>Aranžmani</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("Index", "MenadzerSmestaj")">
+                                    <i class="fas fa-bed me-1"></i>
+                                    <span>Smeštaji</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("Index", "MenadzerRezervacije")">
+                                    <i class="fas fa-calendar-alt me-1"></i>
+                                    <span>Rezervacije</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("Index", "MenadzerKomentar")">
+                                    <i class="fas fa-comments me-1"></i>
+                                    <span>Komentari</span>
+                                </a>
+                            </li>
+                        }
+                        
+                        if (user.uloga == Uloga.Administrator)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("Users", "Admin")">
+                                    <i class="fas fa-users me-1"></i>
+                                    <span>Korisnici</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center" href="@Url.Action("CreateManager", "Admin")">
+                                    <i class="fas fa-user-plus me-1"></i>
+                                    <span>Novi menadžer</span>
+                                </a>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" href="@Url.Action("Profil", "Korisnik")">
+                                <i class="fas fa-user-circle me-1"></i>
+                                <span>@user.KorisnickoIme</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger d-flex align-items-center" href="@Url.Action("Logout", "Korisnik")">
+                                <i class="fas fa-sign-out-alt me-1"></i>
+                                <span>Odjava</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <main class="container-fluid" style="padding-top: 100px;">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3">
+                        <i class="fas fa-plane me-2"></i>
+                        Travel Agency
+                    </h5>
+                    <p class="mb-0">Vaš pouzdan partner za nezaboravna putovanja. Otkrijte svet sa nama!</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links mb-3">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <p class="mb-0">&copy; @DateTime.Now.Year - Travel Agency | Sva prava zadrzana</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,43 @@
+[
+  {
+    "KorisnickoIme": "admin",
+    "Lozinka": "admin123",
+    "Ime": "Pera",
+    "Prezime": "Peric",
+    "Pol": "M",
+    "Email": "admin@gmail.com",
+    "DatumRodjenja": "01.01.1956",
+    "uloga": "Administrator",
+    "Rezervacije": [],
+    "KreiraniAranzmani": []
+  },
+  {
+    "KorisnickoIme": "menadzer",
+    "Lozinka": "menadzer123",
+    "Ime": "Dusan",
+    "Prezime": "Silni",
+    "Pol": "M",
+    "Email": "menadzer@gmail.com",
+    "DatumRodjenja": "23.08.2003",
+    "uloga": "Menadzer",
+    "Rezervacije": [],
+    "KreiraniAranzmani": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "KorisnickoIme": "l",
+    "Lozinka": "12345",
+    "Ime": "Luka",
+    "Prezime": "Arsenov",
+    "Pol": "Z",
+    "Email": "arsen@gmail.com",
+    "DatumRodjenja": "16.09.2025",
+    "uloga": "Turista",
+    "Rezervacije": [],
+    "KreiraniAranzmani": []
+  }
+]

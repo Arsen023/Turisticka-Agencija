@@ -1,0 +1,157 @@
+﻿@model MyWebApp.Models.Rezervacija
+@using MyWebApp.Repositories
+
+@{
+    ViewBag.Title = "Detalji rezervacije";
+    var arRepo = new AranzmanRepository();
+    var ar = arRepo.FindById(Model.AranzmanId);
+
+    string st = Model.status.ToString();
+    string lower = st.ToLowerInvariant();
+    string badge = lower.Contains("aktivna") ? "success"
+               : lower.Contains("otkazana") ? "danger"
+               : "secondary";
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --txt: #f8fafc;
+        --dim: #cfe7f2;
+        --ink: #062a3a;
+    }
+
+    
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--txt);
+    }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' opacity='.05'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            mix-blend-mode: overlay;
+        }
+
+    .narrow {
+        max-width: 920px;
+    }
+
+   
+    .glass {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+
+   
+    .page-title {
+        font-weight: 800;
+        letter-spacing: .3px;
+        margin: 0;
+        background: linear-gradient(90deg,#fff,#e9f8ff 45%,#fff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 20px rgba(34,211,238,.15);
+    }
+
+    .muted {
+        color: var(--dim);
+    }
+
+   
+    .badge {
+        padding: .45em .6em;
+        font-weight: 800;
+        letter-spacing: .2px;
+        border-radius: 999px;
+    }
+
+        .badge.bg-success {
+            background: linear-gradient(90deg,#16a34a,#22c55e) !important;
+            color: #052a37 !important;
+        }
+
+        .badge.bg-danger {
+            background: linear-gradient(90deg,#ef4444,#f97316) !important;
+            color: #fff !important;
+        }
+
+        .badge.bg-secondary {
+            background: linear-gradient(90deg,#64748b,#94a3b8) !important;
+            color: #051821 !important;
+        }
+
+    
+    dl.row dt {
+        color: var(--dim);
+        margin-bottom: .25rem;
+    }
+
+    dl.row dd {
+        color: var(--txt);
+    }
+
+    
+    .btn {
+        border: none;
+        font-weight: 700;
+        letter-spacing: .2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-outline-secondary {
+        color: #eaf7ff;
+        border: 1px solid rgba(255,255,255,.5);
+    }
+
+        .btn-outline-secondary:hover {
+            background: rgba(255,255,255,.12);
+        }
+</style>
+
+<div class="container my-4 narrow">
+    <div class="glass p-4 p-md-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+            <h2 class="page-title">Detalji rezervacije #@Model.Id</h2>
+            <span class="badge bg-@badge">@st</span>
+        </div>
+        <p class="muted mb-4">Pregled podataka o rezervaciji.</p>
+
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Turista</dt>
+            <dd class="col-sm-8">@Model.TuristaKojiVrsiRezervaciju</dd>
+
+            <dt class="col-sm-4">Aranžman</dt>
+            <dd class="col-sm-8">@(ar == null ? ("ID: " + Model.AranzmanId) : ar.Naziv)</dd>
+
+            <dt class="col-sm-4">Smeštajna jedinica</dt>
+            <dd class="col-sm-8">#@Model.SmestajnaJedinicaId</dd>
+
+            <dt class="col-sm-4">Status</dt>
+            <dd class="col-sm-8"><span class="badge bg-@badge">@st</span></dd>
+        </dl>
+
+        <div class="mt-4 d-flex gap-2">
+            @Html.ActionLink("Nazad", "Index", "MenadzerRezervacije", null, new { @class = "btn btn-outline-secondary btn-lg" })
+        </div>
+    </div>
+</div>
