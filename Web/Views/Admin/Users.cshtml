@@ -328,7 +328,7 @@
         <div class="table-header p-3">
             <h5 class="mb-0">
                 <i class="fas fa-table me-2"></i>
-                Lista korisnika (@(Model?.Count ?? 0))
+                Lista korisnika (@(Model != null ? Model.Count : 0))
             </h5>
         </div>
         <div class="table-responsive">

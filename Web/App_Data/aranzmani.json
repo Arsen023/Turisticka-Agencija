@@ -5,13 +5,16 @@
     "tipAranzmana": 3,
     "tipPrevoza": 1,
     "lokacija": 0,
-    "DatumPocetkaPutovanja": "15/06/2024",
-    "DatumZavrsetkaPutovanja": "22/06/2024",
+    "DatumPocetkaPutovanja": "15.06.2024",
+    "DatumZavrsetkaPutovanja": "22.06.2024",
     "MaxBrPutnika": 25,
     "OpisAranzmana": "Otkrijte magiju grckih ostrva sa nezaboravnim putovanjem na Santorini. Uzivajte u predivnim zalazima sunca, istorijskim lokacijama i autenticnoj grckoj kuhinji.",
     "ProgramPutovanja": "Dan 1: Dolazak u Santorini i smestaj... Dan 2: Poseta Firi i Oiji... Dan 3: Izlet na vulkansko ostrvo...",
     "PosterAranzmana": "santorini.jpg",
-    "SmestajId": [1, 2],
+    "SmestajId": [
+      1,
+      2
+    ],
     "Smestaji": [],
     "IsDeleted": false
   },
@@ -21,13 +24,16 @@
     "tipAranzmana": 3,
     "tipPrevoza": 1,
     "lokacija": 0,
-    "DatumPocetkaPutovanja": "10/07/2024",
-    "DatumZavrsetkaPutovanja": "17/07/2024",
+    "DatumPocetkaPutovanja": "10.07.2024",
+    "DatumZavrsetkaPutovanja": "17.07.2024",
     "MaxBrPutnika": 30,
     "OpisAranzmana": "Relaksirajte se na turskoj rivijeri u Antaliji. Kombinacija istorije, kulture i predivnih plaza cini ovaj aranzman savrsenim za porodicno putovanje.",
     "ProgramPutovanja": "Dan 1: Dolazak u Antaliju... Dan 2: Poseta Kaleici starom gradu... Dan 3: Izlet na Duden vodopade...",
     "PosterAranzmana": "antalija.jpg",
-    "SmestajId": [3, 4],
+    "SmestajId": [
+      3,
+      4
+    ],
     "Smestaji": [],
     "IsDeleted": false
   },
@@ -37,13 +43,15 @@
     "tipAranzmana": 1,
     "tipPrevoza": 0,
     "lokacija": 0,
-    "DatumPocetkaPutovanja": "05/08/2024",
-    "DatumZavrsetkaPutovanja": "12/08/2024",
+    "DatumPocetkaPutovanja": "05.08.2024",
+    "DatumZavrsetkaPutovanja": "12.08.2024",
     "MaxBrPutnika": 20,
     "OpisAranzmana": "Istrazite 'Biser Jadrana' - Dubrovnik sa svojim impresivnim zidinama, istorijskim centrom i kristalno cistim morem. Idealno za ljubitelje istorije i prirode.",
     "ProgramPutovanja": "Dan 1: Dolazak u Dubrovnik... Dan 2: Setnja po zidinama... Dan 3: Izlet na Lokrum ostrvo...",
     "PosterAranzmana": "dubrovnik.jpg",
-    "SmestajId": [5],
+    "SmestajId": [
+      5
+    ],
     "Smestaji": [],
     "IsDeleted": false
   },
@@ -53,13 +61,16 @@
     "tipAranzmana": 0,
     "tipPrevoza": 1,
     "lokacija": 0,
-    "DatumPocetkaPutovanja": "15/09/2024",
-    "DatumZavrsetkaPutovanja": "22/09/2024",
+    "DatumPocetkaPutovanja": "15.09.2024",
+    "DatumZavrsetkaPutovanja": "22.09.2024",
     "MaxBrPutnika": 18,
     "OpisAranzmana": "Otkrijte carobnu Barcelonu sa Gaudijevim arhitektonskim remek-delima, zivahnim ulicama i predivnim plazama. Savrseno za kulturno i gastronomsko iskustvo.",
     "ProgramPutovanja": "Dan 1: Dolazak u Barcelonu... Dan 2: Poseta Sagrada Familia... Dan 3: Setnja po Las Ramblas...",
     "PosterAranzmana": "barselona.jpg",
-    "SmestajId": [6, 7],
+    "SmestajId": [
+      6,
+      7
+    ],
     "Smestaji": [],
     "IsDeleted": false
   },
@@ -69,13 +80,16 @@
     "tipAranzmana": 1,
     "tipPrevoza": 1,
     "lokacija": 2,
-    "DatumPocetkaPutovanja": "10/10/2024",
-    "DatumZavrsetkaPutovanja": "17/10/2024",
+    "DatumPocetkaPutovanja": "10.10.2024",
+    "DatumZavrsetkaPutovanja": "17.10.2024",
     "MaxBrPutnika": 22,
     "OpisAranzmana": "Romanticno putovanje kroz Italiju - od vecnog Rima do predivnih toskanskih brezuljaka. Uzivajte u autenticnoj italijanskoj kuhinji i bogatoj kulturi.",
     "ProgramPutovanja": "Dan 1: Dolazak u Rim... Dan 2: Poseta Koloseumu... Dan 3: Izlet u Toskana...",
     "PosterAranzmana": "rim.jpg",
-    "SmestajId": [8, 9],
+    "SmestajId": [
+      8,
+      9
+    ],
     "Smestaji": [],
     "IsDeleted": false
   },
@@ -85,13 +99,34 @@
     "tipAranzmana": 0,
     "tipPrevoza": 1,
     "lokacija": 0,
-    "DatumPocetkaPutovanja": "05/11/2024",
-    "DatumZavrsetkaPutovanja": "12/11/2024",
+    "DatumPocetkaPutovanja": "05.11.2024",
+    "DatumZavrsetkaPutovanja": "12.11.2024",
     "MaxBrPutnika": 15,
     "OpisAranzmana": "Romanticno putovanje u grad svetlosti - Pariz. Posetite Eiffelov toranj, Louvre, Notre-Dame i uzivajte u francuskoj eleganciji i gastronomiji.",
     "ProgramPutovanja": "Dan 1: Dolazak u Pariz... Dan 2: Poseta Eiffelovom tornju... Dan 3: Setnja po Montmartreu...",
     "PosterAranzmana": "pariz.jpg",
-    "SmestajId": [10],
+    "SmestajId": [
+      10
+    ],
+    "Smestaji": [],
+    "IsDeleted": false
+  },
+  {
+    "Id": 7,
+    "Naziv": "BEOGRAD",
+    "tipAranzmana": 1,
+    "tipPrevoza": 1,
+    "lokacija": 0,
+    "DatumPocetkaPutovanja": "12.10.2025",
+    "DatumZavrsetkaPutovanja": "14.10.2025",
+    "MaxBrPutnika": 20,
+    "OpisAranzmana": "AHHAHSUS",
+    "ProgramPutovanja": "asnaSNJA",
+    "PosterAranzmana": "WhatsApp Image 2024-12-05 at 03.15.29_f13644c2_20251004_114715686.jpg",
+    "SmestajId": [
+      2,
+      11
+    ],
     "Smestaji": [],
     "IsDeleted": false
   }

@@ -9,9 +9,9 @@ using System.Web.UI.WebControls;
 
 namespace MyWebApp.Models
 {
-    public enum TipAranzmana { nocenje_sa_doruckom, polupansion, pun_pansion, all_inclusive, najam_apartamana }
-    public enum TipPrevoza { autobus, avion, autobus_avion, individualan, ostalo}
-    public enum LokacijaGdeSePutuje { grad, drzava, regija}
+    public enum TipAranzmana { NocenjeSaDoruckom, Polupansion, PunPansion, AllInclusive, NajamApartamana }
+    public enum TipPrevoza { Autobus, Avion, AutobusAvion, Individualan, Ostalo }
+    public enum LokacijaGdeSePutuje { Grad, Drzava, Regija}
     public class Aranzman
     {
        

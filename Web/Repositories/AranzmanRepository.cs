@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using MyWebApp.Models;
+using MyWebApp.Service;
 using Newtonsoft.Json;
 
 namespace MyWebApp.Repositories
@@ -17,17 +18,46 @@ namespace MyWebApp.Repositories
         {
             if (!File.Exists(filePath)) return new List<Aranzman>();
 
-            var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<List<Aranzman>>(json,
-                new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy" }
-            ) ?? new List<Aranzman>();
+            try
+            {
+                var json = File.ReadAllText(filePath);
+                
+                // Prvo probaj sa CustomDateConverter
+                try
+                {
+                    var settings = new JsonSerializerSettings 
+                    { 
+                        DateFormatString = "dd/MM/yyyy",
+                        Converters = new List<JsonConverter> { new MyWebApp.Service.CustomDateConverter() }
+                    };
+                    return JsonConvert.DeserializeObject<List<Aranzman>>(json, settings) ?? new List<Aranzman>();
+                }
+                catch (FormatException)
+                {
+                    // Ako CustomDateConverter ne radi, probaj bez njega
+                    var settings = new JsonSerializerSettings 
+                    { 
+                        DateFormatString = "dd/MM/yyyy"
+                    };
+                    return JsonConvert.DeserializeObject<List<Aranzman>>(json, settings) ?? new List<Aranzman>();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log grešku - možete dodati logovanje ovde
+                System.Diagnostics.Debug.WriteLine($"Greška pri čitanju aranzmana: {ex.Message}");
+                return new List<Aranzman>();
+            }
         }
 
         private void SaveAll(List<Aranzman> data)
         {
-            var json = JsonConvert.SerializeObject(data, Formatting.Indented,
-                new JsonSerializerSettings { DateFormatString = "dd/MM/yyyy" }
-            );
+            var settings = new JsonSerializerSettings 
+            { 
+                DateFormatString = "dd/MM/yyyy",
+                Converters = new List<JsonConverter> { new MyWebApp.Service.CustomDateConverter() }
+            };
+            var json = JsonConvert.SerializeObject(data, Formatting.Indented, settings);
             File.WriteAllText(filePath, json);
         }
 
@@ -80,11 +110,13 @@ namespace MyWebApp.Repositories
 
             if (changed)
             {
-             
-                var json = Newtonsoft.Json.JsonConvert.SerializeObject(list, Newtonsoft.Json.Formatting.Indented,
-                    new Newtonsoft.Json.JsonSerializerSettings { DateFormatString = "dd/MM/yyyy" });
-                System.IO.File.WriteAllText(
-                    System.Web.HttpContext.Current.Server.MapPath("~/App_Data/aranzmani.json"), json);
+                var settings = new JsonSerializerSettings 
+                { 
+                    DateFormatString = "dd/MM/yyyy",
+                    Converters = new List<JsonConverter> { new MyWebApp.Service.CustomDateConverter() }
+                };
+                var json = JsonConvert.SerializeObject(list, Formatting.Indented, settings);
+                File.WriteAllText(filePath, json);
             }
 
             return changed;

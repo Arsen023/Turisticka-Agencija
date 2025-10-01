@@ -1,5 +1,6 @@
 using MyWebApp.Models;
 using MyWebApp.Repositories;
+using MyWebApp.Service;
 using System;
 using System.Linq;
 using System.Web.Mvc;
@@ -9,6 +10,7 @@ namespace MyWebApp.Controllers
 {
     public class RezervacijaController : Controller
     {
+        private readonly RezervacijaService rezervacijaService = new RezervacijaService();
         private readonly RezervacijaRepository rezervacijaRepo = new RezervacijaRepository();
         private readonly AranzmanRepository aranzmanRepo = new AranzmanRepository();
         private readonly SmestajRepository smestajRepo = new SmestajRepository();
@@ -23,61 +25,15 @@ namespace MyWebApp.Controllers
             var aranzmani = aranzmanRepo.GetAll();
             var smestaji = smestajRepo.GetAll();
             var jedinice = smestajnaJedinicaRepo.GetAll(); 
-            var mojeRezervacije = rezervacijaRepo.GetAll()
-                .Where(r => r.TuristaKojiVrsiRezervaciju == user.KorisnickoIme)
-                .ToList();
+            var mojeRezervacije = rezervacijaService.Pretrazi(user.KorisnickoIme, searchId, searchNaziv, searchStatus);
 
             ViewBag.Aranzmani = aranzmani;
             ViewBag.Smestaji = smestaji;
             ViewBag.SmestajneJedinice = jedinice;
 
-
-
-            
-            if (!string.IsNullOrEmpty(searchId) && int.TryParse(searchId, out int id))
+            if (!string.IsNullOrEmpty(sort))
             {
-                mojeRezervacije = mojeRezervacije
-                    .Where(r => r.Id == id)
-                    .ToList();
-            }
-
-         
-            if (!string.IsNullOrEmpty(searchNaziv))
-            {
-                mojeRezervacije = mojeRezervacije
-                    .Where(r =>
-                    {
-                        var aranzman = aranzmanRepo.FindById(r.AranzmanId);
-                        return aranzman != null &&
-                               aranzman.Naziv.IndexOf(searchNaziv, StringComparison.OrdinalIgnoreCase) >= 0;
-                    })
-                    .ToList();
-            }
-
-            
-            if (!string.IsNullOrEmpty(searchStatus))
-            {
-                if (Enum.TryParse(searchStatus, true, out Status statusFilter))
-                {
-                    mojeRezervacije = mojeRezervacije
-                        .Where(r => r.status == statusFilter)
-                        .ToList();
-                }
-            }
-
-           
-            switch (sort)
-            {
-                case "nazivAsc":
-                    mojeRezervacije = mojeRezervacije
-                        .OrderBy(r => aranzmanRepo.FindById(r.AranzmanId)?.Naziv)
-                        .ToList();
-                    break;
-                case "nazivDesc":
-                    mojeRezervacije = mojeRezervacije
-                        .OrderByDescending(r => aranzmanRepo.FindById(r.AranzmanId)?.Naziv)
-                        .ToList();
-                    break;
+                mojeRezervacije = rezervacijaService.Sortiraj(mojeRezervacije, sort);
             }
 
             return View(mojeRezervacije);
@@ -134,33 +90,19 @@ namespace MyWebApp.Controllers
             if (user == null || user.uloga != Uloga.Turista)
                 return RedirectToAction("Login", "Korisnik");
 
-            var rezervacija = rezervacijaRepo.FindById(id);
+            var rezervacija = rezervacijaService.FindById(id);
             if (rezervacija == null || rezervacija.TuristaKojiVrsiRezervaciju != user.KorisnickoIme)
                 return HttpNotFound();
 
-            var aranzman = aranzmanRepo.FindById(rezervacija.AranzmanId);
-            if (aranzman == null) return HttpNotFound();
-
-            if (aranzman.DatumZavrsetkaPutovanja <= DateTime.Now)
+            if (rezervacijaService.OtkaziRezervaciju(id))
             {
-                TempData["RezervacijaERR"] = "Ne možete otkazati rezervaciju jer je aranžman već prošao.";
-                return RedirectToAction("Index");
+                TempData["RezervacijaOK"] = "Rezervacija uspesno otkazana!";
+            }
+            else
+            {
+                TempData["RezervacijaERR"] = "Ne mozete otkazati rezervaciju jer je aranzman vec prosao.";
             }
 
-            rezervacija.status = Status.otkazana;
-            rezervacijaRepo.Update(rezervacija);
-
-           
-            var jedinica = smestajnaJedinicaRepo.GetAll()
-                            .FirstOrDefault(j => j.Id == rezervacija.SmestajnaJedinicaId);
-            if (jedinica != null)
-            {
-                jedinica.Status = StatusSmestajneJedinice.Slobodna;
-                smestajnaJedinicaRepo.Update(jedinica);
-            }
-
-            TempData["RezervacijaOK"] = "Rezervacija uspešno otkazana!";
-         
             return RedirectToAction("Index");
         }
 
@@ -171,7 +113,7 @@ namespace MyWebApp.Controllers
             if (user == null || user.uloga != Uloga.Turista)
                 return RedirectToAction("Login", "Korisnik");
 
-            var rezervacija = rezervacijaRepo.FindById(id);
+            var rezervacija = rezervacijaService.FindById(id);
             if (rezervacija == null || rezervacija.TuristaKojiVrsiRezervaciju != user.KorisnickoIme)
                 return HttpNotFound();
 

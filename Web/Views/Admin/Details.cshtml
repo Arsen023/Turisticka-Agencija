@@ -165,11 +165,11 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <div class="info-label">Broj rezervacija</div>
-                            <div class="info-value">@(Model.Rezervacije?.Count ?? 0)</div>
+                            <div class="info-value">@(Model.Rezervacije != null ? Model.Rezervacije.Count : 0)</div>
                         </div>
                         <div class="col-12">
                             <div class="info-label">Kreirani aranzmani</div>
-                            <div class="info-value">@(Model.KreiraniAranzmani?.Count ?? 0)</div>
+                            <div class="info-value">@(Model.KreiraniAranzmani != null ? Model.KreiraniAranzmani.Count : 0)</div>
                         </div>
                     </div>
                 </div>

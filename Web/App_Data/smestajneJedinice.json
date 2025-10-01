@@ -122,7 +122,7 @@
     "DozvoljenBrojGostiju": 2,
     "DozvoljeniKucniLjubimci": false,
     "CenaZaCeluSmestajnuJedinicu": 95.0,
-    "Status": 0,
+    "Status": 1,
     "IsDeleted": false
   },
   {
@@ -213,6 +213,15 @@
     "DozvoljeniKucniLjubimci": false,
     "CenaZaCeluSmestajnuJedinicu": 300.0,
     "Status": 0,
+    "IsDeleted": false
+  },
+  {
+    "Id": 25,
+    "SmestajID": 11,
+    "DozvoljenBrojGostiju": 4,
+    "DozvoljeniKucniLjubimci": true,
+    "CenaZaCeluSmestajnuJedinicu": 5.0,
+    "Status": 1,
     "IsDeleted": false
   }
 ]

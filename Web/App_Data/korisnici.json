@@ -33,11 +33,37 @@
     "Lozinka": "12345",
     "Ime": "Luka",
     "Prezime": "Arsenov",
-    "Pol": "Muski",
+    "Pol": "Z",
     "Email": "arsen@gmail.com",
     "DatumRodjenja": "05.10.2025",
     "uloga": "Turista",
     "Rezervacije": [],
     "KreiraniAranzmani": []
+  },
+  {
+    "KorisnickoIme": "test",
+    "Lozinka": "12345",
+    "Ime": "Test",
+    "Prezime": "Testic",
+    "Pol": "M",
+    "Email": "test@gmail.com",
+    "DatumRodjenja": "07.10.2025",
+    "uloga": "Turista",
+    "Rezervacije": [],
+    "KreiraniAranzmani": []
+  },
+  {
+    "KorisnickoIme": "testa",
+    "Lozinka": "12345",
+    "Ime": "test",
+    "Prezime": "testic",
+    "Pol": "M",
+    "Email": "primer@gmail.com",
+    "DatumRodjenja": "13.10.2025",
+    "uloga": "Menadzer",
+    "Rezervacije": [],
+    "KreiraniAranzmani": [
+      7
+    ]
   }
 ]

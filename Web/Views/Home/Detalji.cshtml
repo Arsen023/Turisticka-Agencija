@@ -5,7 +5,7 @@
 
     var aranzmanService = new AranzmanService();
     var fullAranzman = aranzmanService.GetById(Model.Id);
-    var smestaji = fullAranzman?.Smestaji ?? new List<MyWebApp.Models.Smestaj>();
+    var smestaji = fullAranzman != null ? fullAranzman.Smestaji : new List<MyWebApp.Models.Smestaj>();
     bool korisnikPrijavljen = Session["Korisnik"] != null;
 }
 
@@ -44,8 +44,8 @@
         background: var(--glass) !important;
         border: 1px solid var(--stroke) !important;
         border-radius: 18px !important;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
         box-shadow: 0 10px 30px rgba(0,0,0,.22);
         color: var(--text);
     }
@@ -68,8 +68,8 @@
 
     .hero-section {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 24px;
         padding: 3rem;
@@ -89,9 +89,15 @@
         object-fit: cover;
         transition: transform 0.3s ease;
     }
+    
+    /* Smooth transitions for all hover effects */
+    .card, .smestaj-card, .jedinice-table tbody tr, .comments-wrap .comments-body .table tbody tr {
+        transition: all 0.2s ease;
+    }
 
     .image-container:hover .trip-hero {
-        transform: scale(1.05);
+        transform: scale(1.02);
+        transition: transform 0.3s ease;
     }
 
     .image-overlay {
@@ -260,7 +266,8 @@
         }
 
         .jedinice-table tbody tr:hover {
-            background: rgba(255,255,255,.06);
+            background: rgba(255,255,255,.08);
+            transition: background-color 0.2s ease;
         }
 
         .jedinice-table td, .jedinice-table th {
@@ -320,7 +327,8 @@
                 }
 
                 .comments-wrap .comments-body .table tbody tr:hover {
-                    background: rgba(255,255,255,.06) !important;
+                    background: rgba(255,255,255,.08) !important;
+                    transition: background-color 0.2s ease;
                 }
 
             .comments-wrap .comments-body > div, .comments-wrap .comments-body > li, .comments-wrap .comments-body > article {
@@ -334,8 +342,8 @@
 
     .program-section .card {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 20px;
     }
@@ -348,8 +356,8 @@
 
     .filters-section .card {
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 20px;
     }
@@ -560,7 +568,7 @@
         {
             foreach (var sm in smestaji)
             {
-                int brojSlobodnih = sm.SmestajneJedinicee?.Count(j => j.Status == MyWebApp.Models.StatusSmestajneJedinice.Slobodna) ?? 0;
+                int brojSlobodnih = sm.SmestajneJedinicee != null ? sm.SmestajneJedinicee.Count(j => j.Status == MyWebApp.Models.StatusSmestajneJedinice.Slobodna) : 0;
                 <div class="col-md-12 mb-4 smestaj-card"
                      data-naziv="@sm.Naziv"
                      data-tip="@sm.tipSmestaja.ToString().ToLower()"

@@ -16,6 +16,7 @@
     var statusLower = statusText.ToLowerInvariant();
     var badgeClass = statusLower.Contains("aktivna") ? "badge-ok"
                  : statusLower.Contains("otkazana") ? "badge-bad"
+                 : statusLower.Contains("zavrsena") ? "badge-info"
                  : "badge-muted";
 }
 
@@ -90,6 +91,9 @@
     .badge-bad{
         background:linear-gradient(90deg,#ef4444,#f97316); color:#fff;
     }
+    .badge-info{
+        background:linear-gradient(90deg,#0ea5e9,#22d3ee); color:#053b4c;
+    }
     .badge-muted{
         background:linear-gradient(90deg,#64748b,#94a3b8); color:#051821;
     }
@@ -130,7 +134,7 @@
            
             <div class="mb-3">
                 <h4 class="mb-1 section-title">
-                    @((a?.Naziv) ?? "—")
+                    @((a != null ? a.Naziv : null) ?? "—")
                 </h4>
                 @if (a != null && !string.IsNullOrWhiteSpace(a.OpisAranzmana))
                 {

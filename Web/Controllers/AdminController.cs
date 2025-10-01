@@ -17,13 +17,18 @@ namespace MyWebApp.Controllers
         {
             var k = Session["Korisnik"] as Korisnik;
             if (k == null || k.uloga != Uloga.Administrator)
-                throw new HttpException(401, "Samo administrator ima pristup.");
+            {
+                TempData["Error"] = "Samo administrator ima pristup.";
+                return null;
+            }
             return k;
         }
 
         public ActionResult Users(string q = "", string uloga = "")
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
 
             var list = _korRepo.GetAll();
 
@@ -51,14 +56,19 @@ namespace MyWebApp.Controllers
 
         public ActionResult CreateManager()
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
+            
             return View(new RegisterManagerViewModel());
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult CreateManager(RegisterManagerViewModel vm)
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
 
          
             var rawBirth = Request.Form["DatumRodjenja"]; 
@@ -108,7 +118,9 @@ namespace MyWebApp.Controllers
 
         public ActionResult Details(string id)
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
             var korisnik = _korRepo.FindByUsername(id);
             if (korisnik == null)
             {
@@ -120,7 +132,9 @@ namespace MyWebApp.Controllers
 
         public ActionResult Edit(string id)
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
             var korisnik = _korRepo.FindByUsername(id);
             if (korisnik == null)
             {
@@ -134,7 +148,9 @@ namespace MyWebApp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Edit(EditUserViewModel editViewModel)
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
             
             // Ako je lozinka prazna, zadrži postojeću lozinku
             if (string.IsNullOrWhiteSpace(editViewModel.Lozinka))
@@ -158,7 +174,9 @@ namespace MyWebApp.Controllers
 
         public ActionResult Delete(string id)
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
             var korisnik = _korRepo.FindByUsername(id);
             if (korisnik == null)
             {
@@ -176,7 +194,9 @@ namespace MyWebApp.Controllers
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
         public ActionResult DeleteConfirmed(string id)
         {
-            Curr();
+            var currentUser = Curr();
+            if (currentUser == null)
+                return RedirectToAction("Index", "Home");
             var korisnik = _korRepo.FindByUsername(id);
             if (korisnik != null)
             {

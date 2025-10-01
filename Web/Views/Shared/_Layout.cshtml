@@ -66,8 +66,8 @@
         /* Enhanced Navigation */
         .navbar {
             background: var(--glass-bg) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--glass-border);
             box-shadow: var(--shadow-light);
             transition: var(--transition);
@@ -85,8 +85,9 @@
         }
 
         .navbar-brand:hover {
-            transform: scale(1.05);
+            transform: scale(1.02);
             text-decoration: none;
+            transition: transform 0.3s ease;
         }
 
         .nav-link {
@@ -117,7 +118,8 @@
 
         .nav-link:hover {
             color: white !important;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
+            transition: all 0.3s ease;
         }
 
         .navbar-toggler {
@@ -125,7 +127,7 @@
             padding: 0.5rem;
             border-radius: 12px;
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
 
         .navbar-toggler:focus {
@@ -135,8 +137,8 @@
         /* Enhanced Cards */
         .card {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--glass-border);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-medium);
@@ -145,8 +147,9 @@
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-4px) scale(1.01);
             box-shadow: var(--shadow-heavy);
+            transition: all 0.3s ease;
         }
 
         .card img {
@@ -154,7 +157,8 @@
         }
 
         .card:hover img {
-            transform: scale(1.1);
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
         }
 
         /* Enhanced Buttons */
@@ -193,8 +197,9 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.5);
+            transition: all 0.3s ease;
         }
 
         .btn-success {
@@ -270,7 +275,8 @@
             }
             
             .card:hover {
-                transform: translateY(-4px) scale(1.01);
+                transform: translateY(-2px) scale(1.005);
+                transition: all 0.3s ease;
             }
         }
 

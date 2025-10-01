@@ -299,7 +299,7 @@
                     {
                         foreach (var s in smestaji)
                         {
-                            var preselected = (Model?.SmestajId ?? new List<int>()).Contains(s.Id);
+                            var preselected = (Model != null ? Model.SmestajId : new List<int>()).Contains(s.Id);
                             <label class="smestaj-card">
                                 <input class="form-check-input smestaj-check"
                                        type="checkbox"

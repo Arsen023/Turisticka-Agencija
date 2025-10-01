@@ -14,7 +14,36 @@ namespace MyWebApp.Service
 
         public List<Rezervacija> GetAll()
         {
-            return rezervacijaRepo.GetAll();
+            var rezervacije = rezervacijaRepo.GetAll();
+            AzurirajStatusRezervacija(rezervacije);
+            return rezervacije;
+        }
+
+        private void AzurirajStatusRezervacija(List<Rezervacija> rezervacije)
+        {
+            var trenutniDatum = DateTime.Now;
+            bool trebaSacuvati = false;
+
+            foreach (var rezervacija in rezervacije)
+            {
+                if (rezervacija.status == Status.aktivna)
+                {
+                    var aranzman = aranzmanRepo.FindById(rezervacija.AranzmanId);
+                    if (aranzman != null && trenutniDatum > aranzman.DatumZavrsetkaPutovanja)
+                    {
+                        rezervacija.status = Status.zavrsena;
+                        trebaSacuvati = true;
+                    }
+                }
+            }
+
+            if (trebaSacuvati)
+            {
+                foreach (var rezervacija in rezervacije)
+                {
+                    rezervacijaRepo.Update(rezervacija);
+                }
+            }
         }
 
         public Rezervacija FindById(int id)
@@ -24,7 +53,9 @@ namespace MyWebApp.Service
 
         public List<Rezervacija> GetByTurista(string korisnickoIme)
         {
-            return GetAll().Where(r => r.TuristaKojiVrsiRezervaciju == korisnickoIme).ToList();
+            var rezervacije = GetAll().Where(r => r.TuristaKojiVrsiRezervaciju == korisnickoIme).ToList();
+            AzurirajStatusRezervacija(rezervacije);
+            return rezervacije;
         }
 
         public bool KreirajRezervaciju(string turista, Aranzman aranzman, int jedinicaId)
@@ -91,7 +122,8 @@ namespace MyWebApp.Service
 
         public List<Rezervacija> Pretrazi(string korisnickoIme, string id = "", string nazivAranzmana = "", string status = "")
         {
-            var query = GetByTurista(korisnickoIme).AsEnumerable();
+            var rezervacije = GetByTurista(korisnickoIme);
+            var query = rezervacije.AsEnumerable();
 
             if (!string.IsNullOrEmpty(id) && int.TryParse(id, out int rezId))
                 query = query.Where(r => r.Id == rezId);

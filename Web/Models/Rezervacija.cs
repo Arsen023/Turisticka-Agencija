@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MyWebApp.Models
 {
-    public enum Status {aktivna,otkazana}
+    public enum Status {aktivna,otkazana,zavrsena}
     public class Rezervacija
     {
         public int Id { get; set; } = 0;

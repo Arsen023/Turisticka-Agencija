@@ -2,8 +2,22 @@
   {
     "Id": 1,
     "TuristaKojiVrsiRezervaciju": "l",
-    "status": 0,
+    "status": 2,
     "AranzmanId": 1,
     "SmestajnaJedinicaId": 1
+  },
+  {
+    "Id": 2,
+    "TuristaKojiVrsiRezervaciju": "l",
+    "status": 2,
+    "AranzmanId": 4,
+    "SmestajnaJedinicaId": 14
+  },
+  {
+    "Id": 3,
+    "TuristaKojiVrsiRezervaciju": "l",
+    "status": 0,
+    "AranzmanId": 7,
+    "SmestajnaJedinicaId": 25
   }
 ]

@@ -18,7 +18,7 @@ namespace Web
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            // Forsiramo da SVI response budu UTF-8
+            
             Response.ContentEncoding = System.Text.Encoding.UTF8;
             Response.HeaderEncoding = System.Text.Encoding.UTF8;
             Response.Charset = "utf-8";

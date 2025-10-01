@@ -198,6 +198,7 @@
                         <option value="">-- Status --</option>
                         <option value="aktivna" @(Request["searchStatus"] == "aktivna" ? "selected" : "")>Aktivna</option>
                         <option value="otkazana" @(Request["searchStatus"] == "otkazana" ? "selected" : "")>Otkazana</option>
+                        <option value="zavrsena" @(Request["searchStatus"] == "zavrsena" ? "selected" : "")>Zavrsena</option>
                        
                     </select>
                 </div>
@@ -235,13 +236,14 @@
                     {
                         foreach (var r in Model)
                         {
-                            var a = aranzmani?.FirstOrDefault(x => x.Id == r.AranzmanId);
-                            var jed = jedinice?.FirstOrDefault(x => x.Id == r.SmestajnaJedinicaId);
+                            var a = aranzmani != null ? aranzmani.FirstOrDefault(x => x.Id == r.AranzmanId) : null;
+                            var jed = jedinice != null ? jedinice.FirstOrDefault(x => x.Id == r.SmestajnaJedinicaId) : null;
 
                             string statusText = r.status.ToString();
                             string lowerStatus = statusText.ToLowerInvariant();
                             string badgeClass = lowerStatus.Contains("aktivna") ? "success"
                                                  : lowerStatus.Contains("otkazana") ? "danger"
+                                                 : lowerStatus.Contains("zavrsena") ? "info"
                                                  : "secondary";
 
                             bool prosao = (a != null && a.DatumZavrsetkaPutovanja <= DateTime.Now);
@@ -249,8 +251,8 @@
                             <tr>
                                 <td class="fw-bold">@r.Id</td>
                                 <td>
-                                    <div class="fw-semibold">@((a?.Naziv) ?? "—")</div>
-                                    <div class="muted small">@((a?.OpisAranzmana) ?? "")</div>
+                                    <div class="fw-semibold">@((a != null ? a.Naziv : null) ?? "—")</div>
+                                    <div class="muted small">@((a != null ? a.OpisAranzmana : null) ?? "")</div>
                                 </td>
                                 <td><span class="badge bg-@badgeClass">@statusText</span></td>
                                 <td>@(a != null ? a.DatumPocetkaPutovanja.ToString("dd.MM.yyyy") : "")</td>
@@ -272,17 +274,24 @@
                                         Detalji
                                     </a>
 
-                                    @if (!prosao && !lowerStatus.Contains("otkazan"))
+                                    @if (!prosao && !lowerStatus.Contains("otkazan") && !lowerStatus.Contains("zavrsena"))
                                     {
                                         <a class="btn btn-sm btn-danger"
                                            href="@Url.Action("Otkazi", "Rezervacija", new { id = r.Id })">
                                             Otkazi
                                         </a>
                                     }
-                                    else if (prosao)
+                                    else if (prosao || lowerStatus.Contains("zavrsena"))
                                     {
                                         <span class="small muted d-block">
-                                            Ne mozete otkazati (aranzman je prosao)
+                                            @if (lowerStatus.Contains("zavrsena"))
+                                            {
+                                                <text>Rezervacija je zavrsena</text>
+                                            }
+                                            else
+                                            {
+                                                <text>Ne mozete otkazati (aranzman je prosao)</text>
+                                            }
                                         </span>
                                     }
                                 </td>

@@ -162,12 +162,12 @@
         <div class="cardx-header d-flex justify-content-between align-items-center">
             <div>
                 <h3 class="mb-1">Smeštajne jedinice</h3>
-                <div class="text-muted">Smeštaj: <strong>@(s?.Naziv ?? "—")</strong></div>
+                <div class="text-muted">Smeštaj: <strong>@(s != null ? s.Naziv : null ?? "—")</strong></div>
             </div>
             <div class="d-flex gap-2">
                 @Html.ActionLink("Nazad na smeštaje", "Index", "MenadzerSmestaj", null, new { @class = "btn btn-outline-secondary" })
                 @Html.ActionLink("Nova jedinica", "Create", "MenadzerJedinica",
-                    new { smestajId = s?.Id ?? 0 }, new { @class = "btn btn-primary" })
+                    new { smestajId = s != null ? s.Id : 0 }, new { @class = "btn btn-primary" })
             </div>
         </div>
 

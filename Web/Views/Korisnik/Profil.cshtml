@@ -196,7 +196,7 @@
                             <label class="form-label">Pol</label>
                             @Html.DropDownListFor(
                                 m => m.Pol,
-                                new SelectList(new[] { "M", "Z" }, Model?.Pol),
+                                new SelectList(new[] { "M", "Z" }, Model != null ? Model.Pol : null),
                                 "-- Izaberite pol --",
                                 new { @class = "form-select text-dark" }
                             )

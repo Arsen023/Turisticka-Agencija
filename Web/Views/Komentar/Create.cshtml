@@ -155,7 +155,7 @@
     <div class="glass">
         <div class="card-head">
             <h3 class="page-title">Ostavi komentar</h3>
-            <p class="muted mb-3">Smeštaj: <strong>@ViewBag.SmestajNaziv</strong></p>
+            <p class="muted mb-3">Smestaj: <strong>@ViewBag.SmestajNaziv</strong></p>
         </div>
 
         <div class="card-bodyx">
@@ -174,21 +174,21 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Tekst komentara</label>
-                    <textarea name="tekst" class="form-control" placeholder="Podeli svoje iskustvo…" required></textarea>
+                    <textarea name="tekst" class="form-control" placeholder="Podeli svoje iskustvo..." ></textarea>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold d-block">Ocena (1–5)</label>
+                    <label class="form-label fw-semibold d-block">Ocena (1-5)</label>
 
                    
                     <div class="rating" aria-label="Oceni od 1 do 5">
-                        <input type="radio" id="star5" name="ocena" value="5">
+                        <input type="radio" id="star5" name="ocena" value="5" checked>
                         <label for="star5" title="5 zvezdica"></label>
 
                         <input type="radio" id="star4" name="ocena" value="4">
                         <label for="star4" title="4 zvezdice"></label>
 
-                        <input type="radio" id="star3" name="ocena" value="3" checked>
+                        <input type="radio" id="star3" name="ocena" value="3">
                         <label for="star3" title="3 zvezdice"></label>
 
                         <input type="radio" id="star2" name="ocena" value="2">
@@ -197,10 +197,10 @@
                         <input type="radio" id="star1" name="ocena" value="1">
                         <label for="star1" title="1 zvezdica"></label>
                     </div>
-                    <div class="form-text muted mt-1">Klikni na zvezdicu ili ostavi podrazumevano (3).</div>
+                    <div class="form-text muted mt-1">Klikni na zvezdicu ili ostavi podrazumevano (5).</div>
                 </div>
 
-                <button type="submit" class="btn btn-primary px-4">Pošalji</button>
+                <button type="submit" class="btn btn-primary px-4">Posalji</button>
             }
         </div>
     </div>

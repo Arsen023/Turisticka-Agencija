@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "Id": 1,
+    "Turista": "l",
+    "SmestajNaziv": "Santorini Sunset Resort",
+    "Tekst": "NAJJACE",
+    "Ocena": 5,
+    "Odobren": true
+  },
+  {
+    "Id": 2,
+    "Turista": "l",
+    "SmestajNaziv": "Barcelona City Center Hotel",
+    "Tekst": "AHus",
+    "Ocena": 5,
+    "Odobren": false
+  },
+  {
+    "Id": 3,
+    "Turista": "l",
+    "SmestajNaziv": "Santorini Sunset Resort",
+    "Tekst": "jsajsaj",
+    "Ocena": 5,
+    "Odobren": true
+  }
+]
