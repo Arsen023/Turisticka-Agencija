@@ -1,0 +1,178 @@
+@model MyWebApp.Models.EditUserViewModel
+@{
+    ViewBag.Title = "Izmeni korisnika";
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --txt: #f8fafc;
+        --dim: #cfe7f2;
+        --ink: #062a3a;
+        --chipA: #15c1d1;
+        --chipB: #22d3ee;
+        --chipText: #052a37;
+    }
+
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--txt);
+    }
+
+    .glass {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+
+    .page-title {
+        font-weight: 800;
+        letter-spacing: .3px;
+        margin: .25rem 0 1rem;
+        background: linear-gradient(90deg,#fff,#e9f8ff 45%,#fff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 20px rgba(34,211,238,.15);
+    }
+
+    .muted {
+        color: var(--dim);
+    }
+
+    .form-control, .form-select {
+        border-radius: 12px !important;
+        border: 1px solid rgba(255,255,255,.35) !important;
+        background: linear-gradient(90deg,var(--chipA),var(--chipB)) !important;
+        color: var(--chipText) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 8px 16px rgba(0,0,0,.18);
+    }
+
+    .form-control::placeholder {
+        color: #000;
+        opacity: .85;
+    }
+
+    .form-control:focus, .form-select:focus {
+        outline: 0;
+        border-color: #9ff7ff !important;
+        box-shadow: 0 0 0 4px rgba(34,211,238,.35), inset 0 1px 0 rgba(255,255,255,.45) !important;
+    }
+
+    .btn {
+        border: none;
+        font-weight: 700;
+        letter-spacing: .2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-outline-secondary {
+        border-color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-outline-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.8);
+        color: white;
+    }
+</style>
+
+<div class="container my-4">
+    <div class="glass p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h2 class="page-title mb-2">
+                    <i class="fas fa-edit me-3"></i>
+                    Izmeni korisnika
+                </h2>
+                <p class="muted mb-0">Azuriraj informacije o korisniku</p>
+            </div>
+            <div>
+                @Html.ActionLink("Nazad", "Users", "Admin", null, new { @class = "btn btn-outline-secondary" })
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+        @using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { @class = "needs-validation" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.KorisnickoIme)
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Korisnicko ime</label>
+                    @Html.TextBoxFor(m => m.KorisnickoIme, new { @class = "form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(m => m.KorisnickoIme, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Lozinka</label>
+                    @Html.TextBoxFor(m => m.Lozinka, new { @class = "form-control", type = "password", placeholder = "Unesite novu lozinku ili ostavite prazno da zadrzite trenutnu" })
+                    @Html.ValidationMessageFor(m => m.Lozinka, "", new { @class = "text-danger" })
+                    
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Ime</label>
+                    @Html.TextBoxFor(m => m.Ime, new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Ime, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Prezime</label>
+                    @Html.TextBoxFor(m => m.Prezime, new { @class = "form-control", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Prezime, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Pol</label>
+                    @Html.DropDownListFor(m => m.Pol, new SelectList(new[] { "Muski", "Zenski" }), "Izaberite pol", new { @class = "form-select", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Pol, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Email</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Datum rodjenja</label>
+                    @Html.TextBoxFor(m => m.DatumRodjenja, new { @class = "form-control", type = "date", required = "required", @Value = Model.DatumRodjenja.ToString("yyyy-MM-dd") })
+                    @Html.ValidationMessageFor(m => m.DatumRodjenja, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Uloga</label>
+                    @Html.DropDownListFor(m => m.uloga, new SelectList(Enum.GetValues(typeof(MyWebApp.Models.Uloga))), new { @class = "form-select", required = "required" })
+                    @Html.ValidationMessageFor(m => m.uloga, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-save me-1"></i>Sacuvaj izmene
+                </button>
+                <a href="@Url.Action("Users", "Admin")" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i>Odustani
+                </a>
+            </div>
+        }
+    </div>
+</div>

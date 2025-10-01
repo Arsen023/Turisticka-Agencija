@@ -61,7 +61,6 @@ namespace MyWebApp.Controllers
             Curr();
 
          
-            ModelState.Remove("DatumRodjenja");
             var rawBirth = Request.Form["DatumRodjenja"]; 
 
             if (!string.IsNullOrWhiteSpace(rawBirth) &&
@@ -71,10 +70,11 @@ namespace MyWebApp.Controllers
                                        out var dr))
             {
                 vm.DatumRodjenja = dr;
+                ModelState.Remove("DatumRodjenja");
             }
             else
             {
-                ModelState.AddModelError("DatumRodjenja", "Unesite datum rođenja u formatu dd/MM/yyyy.");
+                ModelState.AddModelError("DatumRodjenja", "Unesite datum rodjenja u formatu dd/MM/yyyy.");
             }
 
          
@@ -84,7 +84,7 @@ namespace MyWebApp.Controllers
            
             if (_korRepo.FindByUsername(vm.KorisnickoIme) != null)
             {
-                ModelState.AddModelError("KorisnickoIme", "Korisničko ime je zauzeto.");
+                ModelState.AddModelError("KorisnickoIme", "Korisnicko ime je zauzeto.");
                 return View(vm);
             }
 
@@ -102,7 +102,94 @@ namespace MyWebApp.Controllers
 
             _korRepo.Add(novi);
 
-            TempData["OK"] = "Menadžer uspešno registrovan.";
+            TempData["Success"] = "Menadzer uspesno registrovan.";
+            return RedirectToAction("Users");
+        }
+
+        public ActionResult Details(string id)
+        {
+            Curr();
+            var korisnik = _korRepo.FindByUsername(id);
+            if (korisnik == null)
+            {
+                TempData["Error"] = "Korisnik nije pronadjen.";
+                return RedirectToAction("Users");
+            }
+            return View(korisnik);
+        }
+
+        public ActionResult Edit(string id)
+        {
+            Curr();
+            var korisnik = _korRepo.FindByUsername(id);
+            if (korisnik == null)
+            {
+                TempData["Error"] = "Korisnik nije pronadjen.";
+                return RedirectToAction("Users");
+            }
+            var editViewModel = new EditUserViewModel(korisnik);
+            return View(editViewModel);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Edit(EditUserViewModel editViewModel)
+        {
+            Curr();
+            
+            // Ako je lozinka prazna, zadrži postojeću lozinku
+            if (string.IsNullOrWhiteSpace(editViewModel.Lozinka))
+            {
+                var postojeciKorisnik = _korRepo.FindByUsername(editViewModel.KorisnickoIme);
+                if (postojeciKorisnik != null)
+                {
+                    editViewModel.Lozinka = postojeciKorisnik.Lozinka;
+                }
+            }
+            
+            if (ModelState.IsValid)
+            {
+                var korisnik = editViewModel.ToKorisnik();
+                _korRepo.Update(korisnik);
+                TempData["Success"] = "Korisnik uspesno azuriran.";
+                return RedirectToAction("Users");
+            }
+            return View(editViewModel);
+        }
+
+        public ActionResult Delete(string id)
+        {
+            Curr();
+            var korisnik = _korRepo.FindByUsername(id);
+            if (korisnik == null)
+            {
+                TempData["Error"] = "Korisnik nije pronadjen.";
+                return RedirectToAction("Users");
+            }
+            if (korisnik.uloga == Uloga.Administrator)
+            {
+                TempData["Error"] = "Ne mozete obrisati administratora.";
+                return RedirectToAction("Users");
+            }
+            return View(korisnik);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            Curr();
+            var korisnik = _korRepo.FindByUsername(id);
+            if (korisnik != null)
+            {
+                if (korisnik.uloga == Uloga.Administrator)
+                {
+                    TempData["Error"] = "Ne mozete obrisati administratora.";
+                    return RedirectToAction("Users");
+                }
+                var korisnici = _korRepo.GetAll();
+                korisnici.RemoveAll(k => k.KorisnickoIme == id);
+                _korRepo.SaveAll(korisnici);
+                TempData["Success"] = "Korisnik uspesno obrisan.";
+            }
             return RedirectToAction("Users");
         }
     }

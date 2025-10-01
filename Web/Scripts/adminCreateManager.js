@@ -5,7 +5,13 @@
     var forms = document.querySelectorAll('.needs-validation');
     Array.prototype.slice.call(forms).forEach(function (f) {
         f.addEventListener('submit', function (e) {
-            if (!f.checkValidity()) { e.preventDefault(); e.stopPropagation(); }
+            if (!f.checkValidity()) { 
+                e.preventDefault(); 
+                e.stopPropagation(); 
+                console.log('Form validation failed');
+            } else {
+                console.log('Form validation passed, submitting...');
+            }
             f.classList.add('was-validated');
         }, false);
     });

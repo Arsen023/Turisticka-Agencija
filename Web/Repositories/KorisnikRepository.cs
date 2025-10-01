@@ -16,7 +16,7 @@ namespace MyWebApp.Repositories
         private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings
         {
             DateFormatString = "dd/MM/yyyy",
-            Converters = new List<JsonConverter> { new StringEnumConverter() },
+            Converters = new List<JsonConverter> { new StringEnumConverter(), new MyWebApp.Service.CustomDateConverter() },
             NullValueHandling = NullValueHandling.Ignore
         };
 

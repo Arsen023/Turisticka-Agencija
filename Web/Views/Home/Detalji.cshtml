@@ -580,11 +580,11 @@
                                 <div class="rating small mb-2" title="@sm.BrojZvezdica zvezdice">
                                     @for (int i = 0; i < stars; i++)
                                     {
-                                        <span class="text-warning">★</span>
+                                        <i class="fas fa-star text-warning"></i>
                                     }
                                     @for (int i = stars; i < 5; i++)
                                     {
-                                        <span class="text-muted">☆</span>
+                                        <i class="far fa-star text-muted"></i>
                                     }
                                 </div>
                             }
@@ -593,7 +593,7 @@
                                 <strong>Bazen:</strong> @(sm.PostojanjeBazena ? "Da" : "Ne") |
                                 <strong>Spa:</strong> @(sm.PostojanjeSpaCentra ? "Da" : "Ne") |
                                 <strong>WiFi:</strong> @(sm.wifi ? "Da" : "Ne") |
-                                <strong>Prilagođeno:</strong> @(sm.PrilagodjenoZaOsobeSaInvaliditeton ? "Da" : "Ne")
+                                <strong>Prilagodjeno:</strong> @(sm.PrilagodjenoZaOsobeSaInvaliditeton ? "Da" : "Ne")
                             </p>
                             <p class="text-muted">
                                 <strong>Ukupno jedinica:</strong> @sm.SmestajneJedinicee.Count |

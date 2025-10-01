@@ -1,0 +1,188 @@
+@model MyWebApp.Models.Korisnik
+@{
+    ViewBag.Title = "Detalji korisnika";
+}
+
+<style>
+    :root {
+        --c-deep: #0b2447;
+        --c-mid: #0e7490;
+        --c-sky: #22d3ee;
+        --glass: rgba(255,255,255,.08);
+        --stroke: rgba(255,255,255,.18);
+        --txt: #f8fafc;
+        --dim: #cfe7f2;
+        --ink: #062a3a;
+    }
+
+    body {
+        min-height: 100vh;
+        background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,.06), transparent 60%), radial-gradient(900px 600px at 110% 10%, rgba(255,255,255,.05), transparent 50%), linear-gradient(135deg, var(--c-deep) 0%, #0a3a5a 35%, var(--c-mid) 68%, var(--c-sky) 110%);
+        color: var(--txt);
+    }
+
+    .glass {
+        background: var(--glass);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+
+    .page-title {
+        font-weight: 800;
+        letter-spacing: .3px;
+        margin: .25rem 0 1rem;
+        background: linear-gradient(90deg,#fff,#e9f8ff 45%,#fff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 20px rgba(34,211,238,.15);
+    }
+
+    .muted {
+        color: var(--dim);
+    }
+
+    .btn {
+        border: none;
+        font-weight: 700;
+        letter-spacing: .2px;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(0,0,0,.22);
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg,#0ea5e9,#22d3ee);
+        color: #053b4c;
+    }
+
+    .btn-outline-secondary {
+        border-color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-outline-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.8);
+        color: white;
+    }
+
+    .info-card {
+        background: rgba(255,255,255,.05);
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .info-label {
+        color: var(--dim);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        color: var(--txt);
+        font-weight: 500;
+    }
+</style>
+
+<div class="container my-4">
+    <div class="glass p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h2 class="page-title mb-2">
+                    <i class="fas fa-user me-3"></i>
+                    Detalji korisnika
+                </h2>
+                <p class="muted mb-0">Pregled svih informacija o korisniku</p>
+            </div>
+            <div>
+                @Html.ActionLink("Nazad", "Users", "Admin", null, new { @class = "btn btn-outline-secondary" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="info-card">
+                    <h5 class="mb-4">
+                        <i class="fas fa-id-card me-2"></i>
+                        Osnovni podaci
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="info-label">Korisnicko ime</div>
+                            <div class="info-value">@Model.KorisnickoIme</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-label">Ime i prezime</div>
+                            <div class="info-value">@Model.Ime @Model.Prezime</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">
+                                <a href="mailto:@Model.Email" class="text-decoration-none">
+                                    <i class="fas fa-envelope me-1"></i>
+                                    @Model.Email
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-label">Pol</div>
+                            <div class="info-value">@Model.Pol</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-label">Datum rodjenja</div>
+                            <div class="info-value">@Model.DatumRodjenja.ToString("dd/MM/yyyy")</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-label">Uloga</div>
+                            <div class="info-value">
+                                @{
+                                    var roleClass = Model.uloga == MyWebApp.Models.Uloga.Administrator ? "badge bg-dark"
+                                                   : Model.uloga == MyWebApp.Models.Uloga.Menadzer ? "badge bg-primary"
+                                                   : "badge bg-secondary";
+                                    var roleIcon = Model.uloga == MyWebApp.Models.Uloga.Administrator ? "fas fa-shield-alt"
+                                                 : Model.uloga == MyWebApp.Models.Uloga.Menadzer ? "fas fa-cogs"
+                                                 : "fas fa-user";
+                                }
+                                <span class="@roleClass">
+                                    <i class="@roleIcon me-1"></i>
+                                    @Model.uloga
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-card">
+                    <h5 class="mb-4">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Statistike
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="info-label">Broj rezervacija</div>
+                            <div class="info-value">@(Model.Rezervacije?.Count ?? 0)</div>
+                        </div>
+                        <div class="col-12">
+                            <div class="info-label">Kreirani aranzmani</div>
+                            <div class="info-value">@(Model.KreiraniAranzmani?.Count ?? 0)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="@Url.Action("Edit", "Admin", new { id = Model.KorisnickoIme })" class="btn btn-primary me-2">
+                <i class="fas fa-edit me-1"></i>Izmeni
+            </a>
+            <a href="@Url.Action("Delete", "Admin", new { id = Model.KorisnickoIme })" class="btn btn-outline-danger">
+                <i class="fas fa-trash me-1"></i>Obrisi
+            </a>
+        </div>
+    </div>
+</div>

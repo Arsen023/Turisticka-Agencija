@@ -10,7 +10,7 @@ namespace MyWebApp.ViewModels
         [Required, Display(Name = "Korisničko ime")]
         public string KorisnickoIme { get; set; }
 
-        [Required, MinLength(4), DataType(DataType.Password), Display(Name = "Lozinka")]
+        [Required, MinLength(5), DataType(DataType.Password), Display(Name = "Lozinka")]
         public string Lozinka { get; set; }
 
         [Required, Display(Name = "Ime")]

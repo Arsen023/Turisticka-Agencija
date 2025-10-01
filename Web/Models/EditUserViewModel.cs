@@ -8,14 +8,11 @@ using System.Web;
 
 namespace MyWebApp.Models
 {
-
-    public enum Uloga { Administrator, Menadzer, Turista}
-    public class Korisnik
+    public class EditUserViewModel
     {
         [Required(ErrorMessage = "Korisničko ime je obavezno")]
         public string KorisnickoIme { get; set; } = "";
 
-        [Required(ErrorMessage = "Lozinka je obavezna")]
         [MinLength(5, ErrorMessage = "Lozinka mora imati bar 5 karaktera")]
         public string Lozinka { get; set; } = "";
 
@@ -33,39 +30,47 @@ namespace MyWebApp.Models
         public string Email { get; set; } = "";
 
         [Required(ErrorMessage = "Datum rođenja je obavezan")]
-
         [JsonConverter(typeof(MyWebApp.Service.CustomDateConverter))]
         public DateTime DatumRodjenja { get; set; }
+        
         public Uloga uloga { get; set; }
 
         public List<Rezervacija> Rezervacije { get; set; } = new List<Rezervacija>();
-
-
         public List<int> KreiraniAranzmani { get; set; } = new List<int>();
 
-
-        public Korisnik()
+        public EditUserViewModel()
         {
         }
 
-        public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, string pol, string email, DateTime datumRodjenja, Uloga uloga, List<Rezervacija> rezervacije, List<int> kreiraniAranzmani)
+        public EditUserViewModel(Korisnik korisnik)
         {
-            KorisnickoIme = korisnickoIme;
-            Lozinka = lozinka;
-            Ime = ime;
-            Prezime = prezime;
-            Pol = pol;
-            Email = email;
-            DatumRodjenja = datumRodjenja;
-            this.uloga = uloga;
-            Rezervacije = rezervacije;
-            KreiraniAranzmani = kreiraniAranzmani;
+            KorisnickoIme = korisnik.KorisnickoIme;
+            Lozinka = korisnik.Lozinka;
+            Ime = korisnik.Ime;
+            Prezime = korisnik.Prezime;
+            Pol = korisnik.Pol;
+            Email = korisnik.Email;
+            DatumRodjenja = korisnik.DatumRodjenja;
+            uloga = korisnik.uloga;
+            Rezervacije = korisnik.Rezervacije;
+            KreiraniAranzmani = korisnik.KreiraniAranzmani;
         }
 
-        public override string ToString()
+        public Korisnik ToKorisnik()
         {
-            return base.ToString();
+            return new Korisnik
+            {
+                KorisnickoIme = this.KorisnickoIme,
+                Lozinka = this.Lozinka,
+                Ime = this.Ime,
+                Prezime = this.Prezime,
+                Pol = this.Pol,
+                Email = this.Email,
+                DatumRodjenja = this.DatumRodjenja,
+                uloga = this.uloga,
+                Rezervacije = this.Rezervacije,
+                KreiraniAranzmani = this.KreiraniAranzmani
+            };
         }
     }
 }
-

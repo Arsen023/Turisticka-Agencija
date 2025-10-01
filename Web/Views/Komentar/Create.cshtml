@@ -134,14 +134,18 @@
 
            
             .rating label::before {
-                content: "☆";
+                content: "\f005";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 400;
                 color: #ffffff66;
             }
           
             .rating input:checked ~ label::before,
             .rating label:hover ~ label::before,
             .rating label:hover::before {
-                content: "★";
+                content: "\f005";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
                 color: #facc15;
                 text-shadow: 0 0 10px rgba(250,204,21,.35);
             }
