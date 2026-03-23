@@ -1,4 +1,5 @@
 Web Turistička Agencija
+
 Web aplikacija turističke agencije razvijena u ASP.NET MVC tehnologiji, namenjena upravljanju turističkim aranžmanima, rezervacijama i korisnicima, sa jasno definisanim korisničkim ulogama.
 
 Funkcionalnosti
